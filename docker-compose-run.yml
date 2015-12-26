@@ -26,16 +26,14 @@ backup_database:
         - --result-file=/tmp/mysql_backup/backup.sql
 
 backup_images:
-    build: wiki
-    external_links:
-        - mediawikidocker_mysql_1:mysql
+    image: busybox:latest
     volumes:
         - ./image_backups:/tmp/image_backup
     volumes_from:
         - mediawikidocker_wiki_1
     command:
         - cp
-        - -rp
+        - -r
         - /var/www/html/images/
         - /tmp/image_backup/
     restart: unless-stopped
