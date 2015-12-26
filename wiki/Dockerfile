@@ -10,4 +10,10 @@ RUN set -x; \
     && cd /usr/src/mediawiki/extensions/VisualEditor \
     && git submodule update --init 
 
+ENV MEDIAWIKI_EXT_BRANCH REL1_25
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/CategoryTree.git /usr/src/mediawiki/extensions/CategoryTree
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ExternalData.git /usr/src/mediawiki/extensions/ExternalData
+
 COPY LocalSettings.php /var/www/html/LocalSettings.php 

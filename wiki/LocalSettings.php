@@ -135,6 +135,7 @@ require_once "$IP/extensions/Interwiki/Interwiki.php";
 require_once "$IP/extensions/Renameuser/Renameuser.php";
 require_once "$IP/extensions/SpamBlacklist/SpamBlacklist.php";
 require_once "$IP/extensions/SyntaxHighlight_GeSHi/SyntaxHighlight_GeSHi.php";
+require_once "$IP/extensions/ParserFunctions/ParserFunctions.php";
 
 # VisualEditor Extension
 require_once "$IP/extensions/VisualEditor/VisualEditor.php";
@@ -155,4 +156,11 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
   'domain' => 'localhost',
   'prefix' => 'localhost',
 );
+
+# CategoryTree Extension
+require_once "$IP/extensions/CategoryTree/CategoryTree.php";
+$wgUseAjax = true;
+
+# ExternalData
+require_once "$IP/extensions/ExternalData/ExternalData.php";
 
