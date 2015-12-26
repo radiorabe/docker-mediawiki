@@ -1,11 +1,41 @@
 update:
     build: wiki
-    links:
-        - mysql
-        - parsoid
+    external_links:
+        - mediawikidocker_mysql_1:mysql
     volumes:
         - /var/www/html/images
     command:
         - php
         - maintenance/update.php
+    restart: unless-stopped
+
+backup_database:
+    image: mysql:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: secret
+    volumes:
+        - ./mysql_backups:/tmp/mysql_backup
+    external_links:
+        - mediawikidocker_mysql_1:mysql
+    command:
+        - mysqldump
+        - -uroot
+        - -psecret
+        - -hmysql
+        - mediawiki
+        - --result-file=/tmp/mysql_backup/backup.sql
+
+backup_images:
+    build: wiki
+    external_links:
+        - mediawikidocker_mysql_1:mysql
+    volumes:
+        - ./image_backups:/tmp/image_backup
+    volumes_from:
+        - mediawikidocker_wiki_1
+    command:
+        - cp
+        - -rp
+        - /var/www/html/images/
+        - /tmp/image_backup/
     restart: unless-stopped
