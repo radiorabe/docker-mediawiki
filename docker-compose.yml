@@ -1,0 +1,30 @@
+mysql:
+    image: mysql:latest
+    environment:
+        MYSQL_ROOT_PASSWORD: secret
+
+proxy:
+    image: jwilder/nginx-proxy
+    ports:
+        - "8080:80"
+        - "443:443"
+    volumes:
+        - "/var/run/docker.sock:/tmp/docker.sock:ro"
+
+wiki:
+    build: wiki
+    links:
+        - mysql
+        - parsoid
+    environment:
+        VIRTUAL_HOST: wiki.vcap.me
+    volumes:
+        - /var/www/html/images
+
+parsoid:
+    image: benhutchins/parsoid
+    links:
+        - "proxy:wiki.vcap.me"
+    environment:
+        VIRTUAL_HOST: parsoid.vcap.me
+        MW_URL: "http://wiki.vcap.me"
