@@ -16,4 +16,48 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ExternalData.git /usr/src/mediawiki/extensions/ExternalData
 
+## prolly only needed for semanticbundle (which im not using anymore)
+RUN set -x; \
+    apt-get update \
+    && apt-get install -y --no-install-recommends p7zip-full \
+    && rm -rf /var/lib/apt/lists/*
+RUN set -x; \
+    apt-get update \
+    && apt-get install -y --no-install-recommends zip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
+
+# for installing semanticbundle the composer way
+RUN set -x; \
+    apt-get update \
+    && apt-get install -y --no-install-recommends zlib1g-dev \
+    && docker-php-ext-install zip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cd /usr/src/mediawiki/ \
+    && composer require mediawiki/semantic-media-wiki "~2.3" --update-no-dev
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticInternalObjects.git /usr/src/mediawiki/extensions/SemanticInternalObjects
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticCompoundQueries.git /usr/src/mediawiki/extensions/SemanticCompoundQueries
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticDrilldown.git /usr/src/mediawiki/extensions/SemanticDrilldown
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticForms.git /usr/src/mediawiki/extensions/SemanticForms
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticFormsInputs.git /usr/src/mediawiki/extensions/SemanticFormsInputs
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticImageInput.git /usr/src/mediawiki/extensions/SemanticImageInput
+
+RUN cd /usr/src/mediawiki/ \
+    && composer require mediawiki/semantic-result-formats "~2.3" --update-no-dev
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Arrays.git /usr/src/mediawiki/extensions/Arrays
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /usr/src/mediawiki/extensions/HeaderTabs
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ApprovedRevs.git /usr/src/mediawiki/extensions/ApprovedRevs
+
 COPY LocalSettings.php /var/www/html/LocalSettings.php 

@@ -164,3 +164,16 @@ $wgUseAjax = true;
 # ExternalData
 require_once "$IP/extensions/ExternalData/ExternalData.php";
 
+# Semantic Stuff
+enableSemantics('wiki.vcap.me');
+require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
+require_once "$IP/extensions/SemanticCompoundQueries/SemanticCompoundQueries.php";
+require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
+require_once "$IP/extensions/SemanticForms/SemanticForms.php";
+require_once "$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php";
+require_once "$IP/extensions/SemanticImageInput/SemanticImageInput.php";
+
+# more exts
+require_once "$IP/extensions/Arrays/Arrays.php";
+require_once "$IP/extensions/HeaderTabs/HeaderTabs.php";
+require_once "$IP/extensions/ApprovedRevs/ApprovedRevs.php";

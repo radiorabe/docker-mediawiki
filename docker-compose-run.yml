@@ -1,0 +1,11 @@
+update:
+    build: wiki
+    links:
+        - mysql
+        - parsoid
+    volumes:
+        - /var/www/html/images
+    command:
+        - php
+        - maintenance/update.php
+    restart: unless-stopped
