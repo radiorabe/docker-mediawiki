@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mysql:
+    volumes:
+      # mount for keeping and restoring backups
+      # - /var/lib/backups/mysql:/var/lib/backups/
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+  wiki:
+    volumes:
+      # Mount for images
+      #- /var/lib/images/:/var/www/html/images
+      # mount for keeping and resotrig backups
+      # - /var/lib/backups/images:/var/lib/backups/
+    environment:
+      # external server name
+      # MW_WG_SERVER: http://wiki.vcap.me:8081
+      # Changeme
+      # MW_WG_SECRET: ""
+      MW_WG_SITENAME: RaBeWiki
+      MW_WG_METANAMESPACE: RaBeWiki
+      MW_WG_DBUSER: root
+      MW_WG_DBPASS: secret
+      MW_WG_LANGUAGECODE: de_CH
+      MW_WG_RAWHTML: 'true'
+      # Activate Maintenance mode
+      # MW_WG_READONLY: "Maintenance"
+      # Activate debug
+      # MW_DEBUG: "true"
+

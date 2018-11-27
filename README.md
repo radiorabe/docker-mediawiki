@@ -6,7 +6,7 @@ visualeditor support (aka the works).
 
 ## Installation
 
-``bash
+```bash
 docker-compose pull
 ```
 
