@@ -1,50 +1,59 @@
-FROM synctree/mediawiki:1.25
+FROM mediawiki:1.31 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_25
+ENV MEDIAWIKI_EXT_BRANCH REL1_31
 
 RUN set -x; \
     apt-get update \
-    && apt-get install -y --no-install-recommends git \
-    && apt-get install -y --no-install-recommends zlib1g-dev \
-    && docker-php-ext-install zip \
-    && rm -rf /var/lib/apt/lists/*
+ && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    zlib1g-dev \
+ && docker-php-ext-install \
+    zip \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+RUN docker-php-ext-install mbstring
+
+COPY --from=composer:1.7 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
-RUN cd /usr/src/mediawiki/ \
-    && composer require mediawiki/semantic-media-wiki "~2.3" --update-no-dev
+RUN cd /var/www/html/ \
+ && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev
 
-RUN cd /usr/src/mediawiki/ \
-    && composer require mediawiki/semantic-result-formats "~2.3" --update-no-dev
+RUN cd /var/www/html/ \
+ && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev
+
+RUN cd /var/www/html/ \
+ && composer require  mediawiki/semantic-compound-queries "~1.2" --update-no-dev
 
 # Install extensions with a git based install
 RUN set -x; \
-    git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/VisualEditor.git /usr/src/mediawiki/extensions/VisualEditor \
-    && cd /usr/src/mediawiki/extensions/VisualEditor \
-    && git submodule update --init 
+    git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/VisualEditor.git /var/www/html/extensions/VisualEditor \
+    && cd /var/www/html/extensions/VisualEditor \
+    && git submodule update --init \
+    && chmod +x .
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/CategoryTree.git /usr/src/mediawiki/extensions/CategoryTree
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ExternalData.git /usr/src/mediawiki/extensions/ExternalData
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticInternalObjects.git /usr/src/mediawiki/extensions/SemanticInternalObjects
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticCompoundQueries.git /usr/src/mediawiki/extensions/SemanticCompoundQueries
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/PageForms.git /var/www/html/extensions/PageForms
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticDrilldown.git /usr/src/mediawiki/extensions/SemanticDrilldown
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Arrays.git /var/www/html/extensions/Arrays
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticForms.git /usr/src/mediawiki/extensions/SemanticForms
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /var/www/html/extensions/HeaderTabs
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticFormsInputs.git /usr/src/mediawiki/extensions/SemanticFormsInputs
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ApprovedRevs.git /var/www/html/extensions/ApprovedRevs
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticImageInput.git /usr/src/mediawiki/extensions/SemanticImageInput
+FROM mediawiki:1.31
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Arrays.git /usr/src/mediawiki/extensions/Arrays
+LABEL vendor='Radio Bern RaBe' \
+      maintainer='RaBe IT-Reaktion <it@rabe.ch>'
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /usr/src/mediawiki/extensions/HeaderTabs
+COPY --from=build /var/www/html /var/www/html
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ApprovedRevs.git /usr/src/mediawiki/extensions/ApprovedRevs
+COPY apache.conf /etc/apache2/conf-enabled/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 

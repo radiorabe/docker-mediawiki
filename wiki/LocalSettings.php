@@ -11,11 +11,20 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
+$wgReadOnly = getenv('MW_WG_READONLY') ?: false;
+
+if (getenv('MW_DEBUG')) {
+    ini_set('display_errors', false);
+    $wgShowExceptionDetails = true;
+    $wgShowDBErrorBacktrace = true;
+    $wgDebugToolbar = true;
+}
+
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
 
-$wgSitename = "DevWiki";
-$wgMetaNamespace = "Project";
+$wgSitename = getenv('MW_WG_SITENAME');
+$wgMetaNamespace = getenv('MW_WG_METANAMESPACE');
 
 ## The URL base path to the directory containing the wiki;
 ## defaults for all runtime URL paths are based off of this.
@@ -29,18 +38,18 @@ $wgScriptExtension = ".php";
 $wgArticlePath = "/$1";
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = "http://wiki.vcap.me";
+$wgServer = getenv('MW_WG_SERVER');
 
 ## The relative URL path to the skins directory
 $wgStylePath = "$wgScriptPath/skins";
 
 ## The relative URL path to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
-$wgLogo = "$wgScriptPath/resources/assets/wiki.png";
+$wgLogo = getenv("MW_WG_LOGO") ?: "$wgScriptPath/resources/assets/wiki.png";
 
 ## UPO means: this is also a user preference option
 
-$wgEnableEmail = true;
+$wgEnableEmail = false;
 $wgEnableUserEmail = true; # UPO
 
 $wgEmergencyContact = "apache@localhost";
@@ -54,8 +63,8 @@ $wgEmailAuthentication = true;
 $wgDBtype = "mysql";
 $wgDBserver = "mysql";
 $wgDBname = "mediawiki";
-$wgDBuser = "root";
-$wgDBpassword = "secret";
+$wgDBuser = getenv('MW_WG_DBUSER');
+$wgDBpassword = getenv('MW_WG_DBPASS');
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -72,7 +81,7 @@ $wgMemCachedServers = array();
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
-$wgEnableUploads = false;
+$wgEnableUploads = true;
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 
@@ -96,13 +105,13 @@ $wgShellLocale = "C.UTF-8";
 #$wgCacheDirectory = "$IP/cache";
 
 # Site language code, should be one of the list in ./languages/Names.php
-$wgLanguageCode = "en";
+$wgLanguageCode = getenv("MW_WG_LANGUAGECODE");
 
-$wgSecretKey = "1a0e46df5a9081c7c790dbf60588eea56c87c9634e155572cc2da879147539a3";
+$wgSecretKey = getenv("MW_WG_SECRET");
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "b31022590a7b3b8f";
+$wgUpgradeKey = getenv("MW_WG_UPGRADE_KEY") ?: "b31022590a7b3b8f";
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -121,8 +130,6 @@ $wgDefaultSkin = "vector";
 
 # Enabled skins.
 # The following skins were automatically enabled:
-require_once "$IP/skins/CologneBlue/CologneBlue.php";
-require_once "$IP/skins/Modern/Modern.php";
 require_once "$IP/skins/MonoBook/MonoBook.php";
 require_once "$IP/skins/Vector/Vector.php";
 
@@ -133,7 +140,6 @@ require_once "$IP/skins/Vector/Vector.php";
 require_once "$IP/extensions/Cite/Cite.php";
 require_once "$IP/extensions/Interwiki/Interwiki.php";
 require_once "$IP/extensions/Renameuser/Renameuser.php";
-require_once "$IP/extensions/SpamBlacklist/SpamBlacklist.php";
 require_once "$IP/extensions/SyntaxHighlight_GeSHi/SyntaxHighlight_GeSHi.php";
 require_once "$IP/extensions/ParserFunctions/ParserFunctions.php";
 
@@ -151,10 +157,10 @@ $wgDefaultUserOptions['visualeditor-enable'] = 1;
 
 $wgVirtualRestConfig['modules']['parsoid'] = array(
   // URL to the Parsoid instance
-  // Use port 8142 if you use the Debian package
-  'url' => 'http://parsoid:8000',
-  'domain' => 'localhost',
-  'prefix' => 'localhost',
+  'url' => getenv("MW_WG_PARSOID_URL") ?: 'http://parsoid:8000',
+  'domain' => 'wiki',
+  'prefix' => '',
+  'forwardCookies' => true,
 );
 
 # CategoryTree Extension
@@ -165,15 +171,24 @@ $wgUseAjax = true;
 require_once "$IP/extensions/ExternalData/ExternalData.php";
 
 # Semantic Stuff
-enableSemantics('wiki.vcap.me');
+require_once "$IP/extensions/SemanticMediaWiki/SemanticMediaWiki.php";
+enableSemantics();
+require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
 require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
 require_once "$IP/extensions/SemanticCompoundQueries/SemanticCompoundQueries.php";
 require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
-require_once "$IP/extensions/SemanticForms/SemanticForms.php";
-require_once "$IP/extensions/SemanticFormsInputs/SemanticFormsInputs.php";
-require_once "$IP/extensions/SemanticImageInput/SemanticImageInput.php";
+wfLoadExtension( 'PageForms' );
+
 
 # more exts
 require_once "$IP/extensions/Arrays/Arrays.php";
 require_once "$IP/extensions/HeaderTabs/HeaderTabs.php";
 require_once "$IP/extensions/ApprovedRevs/ApprovedRevs.php";
+
+# for easing migrations
+wfLoadExtension( 'ReplaceText' );
+$wgGroupPermissions['bureaucrat']['replacetext'] = true;
+
+if (getenv('MW_WG_RAWHTML') === 'true') {
+    $wgRawHtml = true;
+}

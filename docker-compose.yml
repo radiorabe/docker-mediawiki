@@ -1,30 +1,31 @@
-mysql:
-    image: mysql:latest
+version: '3'
+services:
+  mysql:
+    image: mariadb:latest
     environment:
-        MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mediawiki
 
-proxy:
-    image: jwilder/nginx-proxy
+  wiki:
+    image: radiorabe/mediawiki:latest
+    build: ./wiki
     ports:
-        - "8080:80"
-        - "443:443"
-    volumes:
-        - "/var/run/docker.sock:/tmp/docker.sock:ro"
-
-wiki:
-    build: wiki
-    links:
-        - mysql
-        - parsoid
+      - "8081:80"
     environment:
-        VIRTUAL_HOST: wiki.vcap.me
+      VIRTUAL_HOST: wiki.vcap.me
+      MW_WG_SERVER: http://wiki.vcap.me:8081
+      MW_WG_DBUSER: root
+      MW_WG_DBPASS: secret
+      MW_WG_LANGUAGECODE: en
+      MW_WG_RAWHTML: 'false'
+      #MW_WG_READONLY: "Maintenance"
+      MW_WG_SECRET: "1a0e46df5a9081c7c790dbf60588eea56c87c9634e155572cc2da879147539a3"
     volumes:
-        - /var/www/html/images
+        - ./images:/var/www/html/images
 
-parsoid:
-    image: benhutchins/parsoid
-    links:
-        - "proxy:wiki.vcap.me"
+  parsoid:
+    image: benhutchins/parsoid:latest
     environment:
         VIRTUAL_HOST: parsoid.vcap.me
-        MW_URL: "http://wiki.vcap.me"
+    volumes:
+        - "./parsoid/:/data/"
