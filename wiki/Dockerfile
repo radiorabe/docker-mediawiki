@@ -18,13 +18,9 @@ COPY --from=composer:1.7 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
- && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev
-
-RUN cd /var/www/html/ \
- && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev
-
-RUN cd /var/www/html/ \
- && composer require  mediawiki/semantic-compound-queries "~1.2" --update-no-dev
+ && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
+ && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
+ && composer require mediawiki/semantic-compound-queries "~1.2" --update-no-dev
 
 # Install extensions with a git based install
 RUN set -x; \
