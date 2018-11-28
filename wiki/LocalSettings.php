@@ -195,3 +195,12 @@ $wgGroupPermissions['bureaucrat']['replacetext'] = true;
 if (getenv('MW_WG_RAWHTML') === 'true') {
     $wgRawHtml = true;
 }
+
+# Auth config
+$wgGroupPermissions['*']['createaccount'] = getenv('MW_AUTH_CREATEACCOUNT') ?: true;
+
+# Auth_remoteuser Extension
+if (getenv('MW_AUTH_REMOTEUSER')) {
+    $wgGroupPermissions['*']['autocreateaccount'] = getenv('MW_AUTH_REMOTEUSER_AUTOCREATEUSER') ?: true;
+    $wgAuthRemoteuserUserName = getenv('MW_AUTH_REMOTEUSER_USER_NAME') ?: null;
+}

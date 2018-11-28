@@ -23,6 +23,9 @@ services:
       MW_WG_DBPASS: secret
       MW_WG_LANGUAGECODE: de-ch
       MW_WG_RAWHTML: 'true'
+      # REMOTE_USER login only
+      MW_AUTH_CREATEACCOUNT: 'false'
+      MW_AUTH_REMOTEUSER: 'true'
       # Activate Maintenance mode
       # MW_WG_READONLY: "Maintenance"
       # Activate debug
