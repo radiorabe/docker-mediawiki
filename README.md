@@ -21,11 +21,11 @@ $EDITOR docker-compose.override.yml
 
 ```bash
 docker-compose up -d
-``
+```
 
 ## Database migration
 
-You need to run the migrations after the initial start of the conatiners so
+You need to run the migrations after the initial start of the containers so
 the tables needed by the semantic extensions are installed.
 
 You can also choose to import old data (see below) and run the migration after
@@ -33,7 +33,7 @@ that.
 
 ```bash
 docker-compose exec wiki php maintenance/update.php --skip-external-dependencies --quick
-``
+```
 
 ## Backup database and images
 
@@ -41,11 +41,11 @@ docker-compose exec wiki php maintenance/update.php --skip-external-dependencies
 docker-compose exec mysql mysqldump -uroot -p$MYSQL_ROOT_PASSWORD mediawiki > backup.sql
 
 # TODO image volume backup
-``
+```
 
 ## Import data from old wiki
 
-You need to place data.sql in `pwd` and then run the following commands
+You can SQL file containing a `mysqldump` in `./data.sql` and then run the following commands.
 
 ```bash
 cat docker-composer.override.yml <<<EOD
@@ -59,7 +59,7 @@ docker-compose up -d
 docker-compose exec mysql mysql -uroot -p$MYSQL_ROOT_PASSWORD mediawiki -e "source /tmp/data.sql"
 
 docker-compose exec wiki php maintenance/update.php --skip-external-dependencies --quick
-``
+```
 
 If you used `<code><pre>` instead of `<syntaxhighlight>` you can do this:
 
@@ -68,8 +68,10 @@ docker-compose exec wiki php extensions/ReplaceText/maintenance/replaceAll.php -
 docker-compose exec wiki php extensions/ReplaceText/maintenance/replaceAll.php --nsall '</pre></code>' '</syntaxhighlight>'
 ```
 
-## Confguration
+## Configuration
 
 Most configurable aspects may be found in the docker-compose yaml files.
+
+The file `docker-compose.example.yml` describes some of the variables. You can copy it to `docker-composer.override.yml` as is to get started.
 
 I'll add a table here when I'm not lazy.
