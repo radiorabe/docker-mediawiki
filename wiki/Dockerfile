@@ -51,6 +51,8 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Auth_remoteuser.git /var/www/html/extensions/Auth_remoteuser
 
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HierarchyBuilder.git /var/www/html/extensions/HierarchyBuilder
+
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/skins/Material.git /var/www/html/skins/Material
 
 FROM mediawiki:1.31

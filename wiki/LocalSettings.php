@@ -171,6 +171,9 @@ wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'CategoryTree' );
 $wgUseAjax = true;
 
+# HierarchyBuilder Extension
+wfLoadExtension( 'HierarchyBuilder' );
+
 # ExternalData
 require_once "$IP/extensions/ExternalData/ExternalData.php";
 
