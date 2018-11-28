@@ -19,7 +19,7 @@ $EDITOR docker-compose.override.yml
 
 ## Startup
 
-``bash
+```bash
 docker-compose up -d
 ``
 
@@ -31,13 +31,13 @@ the tables needed by the semantic extensions are installed.
 You can also choose to import old data (see below) and run the migration after
 that.
 
-``bash
+```bash
 docker-compose exec wiki php maintenance/update.php --skip-external-dependencies --quick
 ``
 
 ## Backup database and images
 
-``bash
+```bash
 docker-compose exec mysql mysqldump -uroot -p$MYSQL_ROOT_PASSWORD mediawiki > backup.sql
 
 # TODO image volume backup
@@ -47,7 +47,7 @@ docker-compose exec mysql mysqldump -uroot -p$MYSQL_ROOT_PASSWORD mediawiki > ba
 
 You need to place data.sql in `pwd` and then run the following commands
 
-``bash
+```bash
 cat docker-composer.override.yml <<<EOD
 mysql:
   volumes:

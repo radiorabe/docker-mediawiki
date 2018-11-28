@@ -163,6 +163,9 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
   'forwardCookies' => true,
 );
 
+# TemplateData Extension
+wfLoadExtension( 'TemplateData' );
+
 # CategoryTree Extension
 require_once "$IP/extensions/CategoryTree/CategoryTree.php";
 $wgUseAjax = true;

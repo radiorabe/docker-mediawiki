@@ -21,7 +21,7 @@ services:
       MW_WG_METANAMESPACE: RaBeWiki
       MW_WG_DBUSER: root
       MW_WG_DBPASS: secret
-      MW_WG_LANGUAGECODE: de_CH
+      MW_WG_LANGUAGECODE: de-ch
       MW_WG_RAWHTML: 'true'
       # Activate Maintenance mode
       # MW_WG_READONLY: "Maintenance"
