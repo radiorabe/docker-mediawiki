@@ -171,9 +171,6 @@ wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'CategoryTree' );
 $wgUseAjax = true;
 
-# HierarchyBuilder Extension
-wfLoadExtension( 'HierarchyBuilder' );
-
 # ExternalData
 require_once "$IP/extensions/ExternalData/ExternalData.php";
 
@@ -186,6 +183,8 @@ require_once "$IP/extensions/SemanticCompoundQueries/SemanticCompoundQueries.php
 require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
 wfLoadExtension( 'PageForms' );
 
+# HierarchyBuilder Extension
+wfLoadExtension( 'HierarchyBuilder' );
 
 # more exts
 require_once "$IP/extensions/Arrays/Arrays.php";
