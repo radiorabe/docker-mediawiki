@@ -132,7 +132,8 @@ $wgDefaultSkin = "vector";
 # The following skins were automatically enabled:
 require_once "$IP/skins/MonoBook/MonoBook.php";
 require_once "$IP/skins/Vector/Vector.php";
-
+# This one is available on demand, move along, there is nothing to see here
+getenv('MW_SKIN_MATERIAL_ENABLE') !== false && wfLoadSkin( 'Material' );
 
 # Enabled Extensions. Most extensions are enabled by including the base extension file here
 # but check specific extension documentation for more details
@@ -167,7 +168,7 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
 wfLoadExtension( 'TemplateData' );
 
 # CategoryTree Extension
-require_once "$IP/extensions/CategoryTree/CategoryTree.php";
+wfLoadExtension( 'CategoryTree' );
 $wgUseAjax = true;
 
 # ExternalData

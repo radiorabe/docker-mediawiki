@@ -49,7 +49,9 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/TemplateData.git /var/www/html/extensions/TemplateData
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Auth_remoteuser /var/www/html/extensions/Auth_remoteuser
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Auth_remoteuser.git /var/www/html/extensions/Auth_remoteuser
+
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/skins/Material.git /var/www/html/skins/Material
 
 FROM mediawiki:1.31
 

@@ -2,7 +2,7 @@ version: '3'
 services:
   mysql:
     volumes:
-      # mount for keeping and restoring backups
+      # mount for keeping backups
       # - /var/lib/backups/mysql:/var/lib/backups/
     environment:
       MYSQL_ROOT_PASSWORD: secret
@@ -10,11 +10,12 @@ services:
     volumes:
       # Mount for images
       #- /var/lib/images/:/var/www/html/images
-      # mount for keeping and resotrig backups
+      # mount for keeping backups
       # - /var/lib/backups/images:/var/lib/backups/
     environment:
+      VIRTUAL_HOST: wiki.vcap.me
       # external server name
-      # MW_WG_SERVER: http://wiki.vcap.me:8081
+      MW_WG_SERVER: http://wiki.vcap.me:8081
       # Changeme
       # MW_WG_SECRET: ""
       MW_WG_SITENAME: RaBeWiki
@@ -30,4 +31,9 @@ services:
       # MW_WG_READONLY: "Maintenance"
       # Activate debug
       # MW_DEBUG: "true"
-
+  # parsoid is currently configured with sane defaults by the config in the parsoid subdirectory
+  # It is not exposed except through this mediawiki instance. As such you probably don't need to
+  # override anything below.
+  #parsoid:
+  #  environment:
+  #    VIRTUAL_HOST: parsoid.vcap.me

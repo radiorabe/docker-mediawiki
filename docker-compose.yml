@@ -12,8 +12,7 @@ services:
     ports:
       - "8081:80"
     environment:
-      VIRTUAL_HOST: wiki.vcap.me
-      MW_WG_SERVER: http://wiki.vcap.me:8081
+      MW_WG_SERVER: ~
       MW_WG_DBUSER: root
       MW_WG_DBPASS: secret
       MW_WG_LANGUAGECODE: en
@@ -21,11 +20,9 @@ services:
       #MW_WG_READONLY: "Maintenance"
       MW_WG_SECRET: "1a0e46df5a9081c7c790dbf60588eea56c87c9634e155572cc2da879147539a3"
     volumes:
-        - ./images:/var/www/html/images
+      - ./images:/var/www/html/images
 
   parsoid:
     image: benhutchins/parsoid:latest
-    environment:
-        VIRTUAL_HOST: parsoid.vcap.me
     volumes:
-        - "./parsoid/:/data/"
+      - "./parsoid/:/data/"
