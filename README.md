@@ -12,10 +12,16 @@ docker-compose pull
 
 ## Configuration
 
+Configuration is done through environmaent variables. Most configurable aspects may be found in the docker-compose yaml files.
+
+The file `docker-compose.example.yml` describes some of the variables. You can copy it to `docker-composer.override.yml` as is to get started.
+
 ```bash
 cp docker-compose.example.yml docker-compose.override.yml
 $EDITOR docker-compose.override.yml
 ```
+
+I'll add a table here when I'm not lazy.
 
 ## Startup
 
@@ -68,10 +74,16 @@ docker-compose exec wiki php extensions/ReplaceText/maintenance/replaceAll.php -
 docker-compose exec wiki php extensions/ReplaceText/maintenance/replaceAll.php --nsall '</pre></code>' '</syntaxhighlight>'
 ```
 
-## Configuration
+Now is also the time to do some final cleanup and optimization after having migrated your wiki to this stack.
 
-Most configurable aspects may be found in the docker-compose yaml files.
+```bash
+docker-compose exec wiki php maintenance/runJobs.php
+```
 
-The file `docker-compose.example.yml` describes some of the variables. You can copy it to `docker-composer.override.yml` as is to get started.
+If you had to wait a long time for the jobs to run you might want to run the updater again so it can optimize the db tables after the jobs have run.
 
-I'll add a table here when I'm not lazy.
+```bash
+docker-compose exec wiki php maintenance/update.php --skip-external-dependencies --quick
+```
+
+
