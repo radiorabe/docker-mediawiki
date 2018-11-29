@@ -2,16 +2,14 @@ version: '3'
 services:
   mysql:
     volumes:
-      # mount for keeping backups
-      # - /var/lib/backups/mysql:/var/lib/backups/
+      # mount for restoring backups
+      # - ./backup:/var/lib/backup/:ro
     environment:
       MYSQL_ROOT_PASSWORD: secret
   wiki:
     volumes:
       # Mount for images
       #- /var/lib/images/:/var/www/html/images
-      # mount for keeping backups
-      # - /var/lib/backups/images:/var/lib/backups/
     environment:
       VIRTUAL_HOST: wiki.vcap.me
       # use your own 64-character random string here! This example is compromised by definition
@@ -33,6 +31,14 @@ services:
       # MW_WG_READONLY: "Maintenance"
       # Activate debug
       # MW_DEBUG: "true"
+  backup:
+    volumes:
+      # where to store backups (default ./backup)
+      # - /var/lib/backup/:/backup
+    environment:
+      MYSQL_PASSWORD: secret
+      # How many days of backups to keep
+      # BACKUP_RETENTION: 14
   # parsoid is currently configured with sane defaults by the config in the parsoid subdirectory
   # It is not exposed except through this mediawiki instance. As such you probably don't need to
   # override anything below.

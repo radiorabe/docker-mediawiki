@@ -25,3 +25,20 @@ services:
     image: benhutchins/parsoid:latest
     volumes:
       - "./parsoid/:/data/"
+
+  backup:
+    image: schnitzler/mysqldump
+    volumes:
+      # backup script to use
+      - ./backup/backup.sh:/etc/periodic/daily/backup:ro
+      # volume for backing up files
+      - ./images:/images:ro
+      # mount backups
+      - ./backup/:/backup
+    command: ["-l", "8", "-d", "8"]
+    environment:
+      BACKUP_RETENTION: 14
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: mediawiki
