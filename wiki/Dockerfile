@@ -20,7 +20,8 @@ COPY --from=composer:1.7 /usr/bin/composer /usr/bin/composer
 RUN cd /var/www/html/ \
  && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
  && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-compound-queries "~1.2" --update-no-dev
+ && composer require mediawiki/semantic-compound-queries "~1.2" --update-no-dev \
+ && composer require jumbojett/openid-connect-php "0.5.0" --update-no-dev
 
 # Install extensions with a git based install
 RUN set -x; \
@@ -67,3 +68,7 @@ COPY --from=build /var/www/html /var/www/html
 COPY apache.conf /etc/apache2/conf-enabled/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
+
+COPY wiki-cmd.sh /usr/local/bin/wiki-cmd
+
+CMD ["wiki-cmd"]
