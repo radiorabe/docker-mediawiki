@@ -10,6 +10,8 @@ services:
     volumes:
       # Mount for images
       #- /var/lib/images/:/var/www/html/images
+      # FreeIPA Cert
+      #- /etc/ipa/ca.crt:/usr/local/share/ca-certificates/ca.crt
     environment:
       VIRTUAL_HOST: wiki.vcap.me
       # use your own 64-character random string here! This example is compromised by definition
