@@ -33,6 +33,8 @@ services:
       # MW_WG_READONLY: "Maintenance"
       # Activate debug
       # MW_DEBUG: "true"
+      # Set the redirect_uri to use, needed for OpenID Connect until we get rid of the sed patch in wiki/Dockerfile
+      # MW_AUTH_OIDC_REDIRECT_URI: URL/to/Special:PluggableAuthLogin
   backup:
     volumes:
       # where to store backups (default ./backup)

@@ -54,7 +54,9 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/PluggableAuth.git /var/www/html/extensions/PluggableAuth
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect
+# Needs workaround for until https://github.com/wikimedia/mediawiki-extensions-OpenIDConnect/commit/d123d847d1cc7d1c4bb451f53b5cdee90948eea3 is released
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect \
+ && sed -i '/if ( $oidc->authenticate() ) {/i $oidc->setRedirectURL(getenv("MW_AUTH_OIDC_REDIRECT_URI"));' extensions/OpenIDConnect/src/OpenIDConnect.php
 
 FROM mediawiki:1.31
 
