@@ -49,11 +49,11 @@ $wgLogo = getenv("MW_WG_LOGO") ?: "$wgScriptPath/resources/assets/wiki.png";
 
 ## UPO means: this is also a user preference option
 
-$wgEnableEmail = false;
+$wgEnableEmail = getenv("MW_WG_ENABLE_EMAIL") ?: false;
 $wgEnableUserEmail = true; # UPO
 
-$wgEmergencyContact = "apache@localhost";
-$wgPasswordSender = "apache@localhost";
+$wgEmergencyContact = getenv("MW_WG_EMERGENCY_CONTACT") ?: "apache@localhost";
+$wgPasswordSender = getenv("MW_WG_PASSWORD_SENDER") ?: "apache@localhost";
 
 $wgEnotifUserTalk = false; # UPO
 $wgEnotifWatchlist = false; # UPO
@@ -91,7 +91,7 @@ $wgUseInstantCommons = false;
 ## If you use ImageMagick (or any other shell command) on a
 ## Linux server, this will need to be set to the name of an
 ## available UTF-8 locale
-$wgShellLocale = "C.UTF-8";
+$wgShellLocale = getenv("MW_WG_SHELL_LOCALE") ?: "C.UTF-8";
 
 ## If you want to use image uploads under safe mode,
 ## create the directories images/archive, images/thumb and
@@ -199,7 +199,19 @@ if (getenv('MW_WG_RAWHTML') === 'true') {
     $wgRawHtml = true;
 }
 
-# Auth config
+# Rights config
+$wgGroupPermissions['*']['read'] = getenv("MW_PERMISSIONS_READ") ?: true;
+$wgGroupPermissions['user']['read'] = getenv("MW_PERMISSIONS_USER_READ") ?: true;
+
+$wgGroupPermissions['*']['edit'] = getenv("MW_PERMISSIONS_EDIT") ?: true;
+$wgGroupPermissions['user']['edit'] = getenv("MW_PERMISSIONS_USER_EDIT") ?: true;
+
+$wgGroupPermissions['*']['createpage'] = getenv("MW_PERMISSIONS_CREATEPAGE") ?: true;
+$wgGroupPermissions['user']['createpage'] = getenv("MW_PERMISSIONS_USER_CREATEPAGE") ?: true;
+
+$wgGroupPermissions['*']['editmyprivateinfo'] = getenv("MW_PERMISSIONS_EDITMYPRIVATEINFO") ?: true;
+
+# Rights for auth config
 $wgGroupPermissions['*']['createaccount'] = getenv('MW_AUTH_CREATEACCOUNT') ?: true;
 $wgGroupPermissions['*']['autocreateaccount'] = getenv('MW_AUTH_AUTOCREATEUSER') ?: false;
 
