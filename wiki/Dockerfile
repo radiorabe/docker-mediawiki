@@ -58,6 +58,8 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect \
  && sed -i '/if ( $oidc->authenticate() ) {/i $oidc->setRedirectURL(getenv("MW_AUTH_OIDC_REDIRECT_URI"));' extensions/OpenIDConnect/src/OpenIDConnect.php
 
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/UserMerge.git /var/www/html/extensions/UserMerge
+
 FROM mediawiki:1.31
 
 LABEL vendor='Radio Bern RaBe' \

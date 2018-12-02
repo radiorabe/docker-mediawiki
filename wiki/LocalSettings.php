@@ -195,6 +195,11 @@ require_once "$IP/extensions/ApprovedRevs/ApprovedRevs.php";
 wfLoadExtension( 'ReplaceText' );
 $wgGroupPermissions['bureaucrat']['replacetext'] = true;
 
+if (getenv("MW_USERMERGE")) {
+    wfLoadExtension( 'UserMerge' );
+    $wgGroupPermissions['bureaucrat']['usermerge'] = getenv('MW_PERMISSION_BUREAUCRAT_USERMERGE') ?: false;;
+}
+
 if (getenv('MW_WG_RAWHTML') === 'true') {
     $wgRawHtml = true;
 }
