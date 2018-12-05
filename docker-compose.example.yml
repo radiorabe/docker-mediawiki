@@ -1,13 +1,13 @@
 version: '3'
 services:
   mysql:
-    volumes:
+    volumes: []
       # mount for restoring backups
       # - ./backup:/var/lib/backup/:ro
     environment:
       MYSQL_ROOT_PASSWORD: secret
   wiki:
-    volumes:
+    volumes: []
       # Mount for images
       #- /var/lib/images/:/var/www/html/images
       # FreeIPA Cert
@@ -36,7 +36,7 @@ services:
       # Set the redirect_uri to use, needed for OpenID Connect until we get rid of the sed patch in wiki/Dockerfile
       # MW_AUTH_OIDC_REDIRECT_URI: URL/to/Special:PluggableAuthLogin
   backup:
-    volumes:
+    volumes: []
       # where to store backups (default ./backup)
       # - /var/lib/backup/:/backup
     environment:
