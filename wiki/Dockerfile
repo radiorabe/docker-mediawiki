@@ -14,7 +14,7 @@ RUN set -x; \
 
 RUN docker-php-ext-install mbstring
 
-COPY --from=composer:1.7 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1.8 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
