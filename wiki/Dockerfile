@@ -1,4 +1,4 @@
-FROM mediawiki:1.31 AS build
+FROM mediawiki:1.32 AS build
 
 ENV MEDIAWIKI_EXT_BRANCH REL1_31
 
@@ -60,7 +60,7 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/UserMerge.git /var/www/html/extensions/UserMerge
 
-FROM mediawiki:1.31
+FROM mediawiki:1.32
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
