@@ -130,22 +130,21 @@ $wgDefaultSkin = "vector";
 
 # Enabled skins.
 # The following skins were automatically enabled:
-require_once "$IP/skins/MonoBook/MonoBook.php";
-require_once "$IP/skins/Vector/Vector.php";
+wfLoadSkin( 'MonoBook' );
+wfLoadSkin( 'Vector' );
 # This one is available on demand, move along, there is nothing to see here
 getenv('MW_SKIN_MATERIAL_ENABLE') !== false && wfLoadSkin( 'Material' );
 
 # Enabled Extensions. Most extensions are enabled by including the base extension file here
 # but check specific extension documentation for more details
 # The following extensions were automatically enabled:
-require_once "$IP/extensions/Cite/Cite.php";
-require_once "$IP/extensions/Interwiki/Interwiki.php";
-require_once "$IP/extensions/Renameuser/Renameuser.php";
-require_once "$IP/extensions/SyntaxHighlight_GeSHi/SyntaxHighlight_GeSHi.php";
-require_once "$IP/extensions/ParserFunctions/ParserFunctions.php";
+wfLoadExtension( 'Interwiki' );
+wfLoadExtension( 'Renameuser' );
+wfLoadExtension( 'SyntaxHighlight_GeSHi' );
+wfLoadExtension( 'ParserFunctions' );
 
 # VisualEditor Extension
-require_once "$IP/extensions/VisualEditor/VisualEditor.php";
+wfLoadExtension( 'VisualEditor' );
 
 # Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
@@ -172,7 +171,7 @@ wfLoadExtension( 'CategoryTree' );
 $wgUseAjax = true;
 
 # ExternalData
-require_once "$IP/extensions/ExternalData/ExternalData.php";
+wfLoadExtension( 'ExternalData' );
 
 # Semantic Stuff
 require_once "$IP/extensions/SemanticMediaWiki/SemanticMediaWiki.php";
