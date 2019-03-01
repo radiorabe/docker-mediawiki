@@ -239,6 +239,9 @@ if (getenv('MW_AUTH_OIDC')) {
         'clientID' => getenv('MW_AUTH_OIDC_CLIENT_ID'),
         'clientsecret' => getenv('MW_AUTH_OIDC_CLIENT_SECRET'),
     ];
+    if (getenv('MW_AUTH_OIDC_SCOPE')) {
+	$wgOpenIDConnect_Config[getenv('MW_AUTH_OIDC_IDP_URL')]['scope'] = getenv('MW_AUTH_OIDC_SCOPE');
+    }
     $wgOpenIDConnect_UseRealNameAsUserName = getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') ?: false;
     $wgOpenIDConnect_UseEmailNameAsUserName = getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') ?: false;
     $wgOpenIDConnect_MigrateUsersByUserName = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') ?: false;
