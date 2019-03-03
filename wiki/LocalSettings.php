@@ -169,6 +169,9 @@ wfLoadExtension( 'TemplateData' );
 # CategoryTree Extension
 wfLoadExtension( 'CategoryTree' );
 $wgUseAjax = true;
+if (getenv('MW_CATEGORYTREE_SIDEBAR_ROOT')) {
+    $wgCategoryTreeSidebarRoot = getenv('MW_CATEGORYTREE_SIDEBAR_ROOT');
+}
 
 # ExternalData
 wfLoadExtension( 'ExternalData' );
