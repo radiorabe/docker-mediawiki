@@ -12,9 +12,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 }
 
 $wgReadOnly = getenv('MW_WG_READONLY') ?: false;
+ini_set('display_errors', false);
 
-if (getenv('MW_DEBUG')) {
-    ini_set('display_errors', false);
+if (getenv('MW_DEBUG')) {    
     $wgShowExceptionDetails = true;
     $wgShowDBErrorBacktrace = true;
     $wgDebugToolbar = true;
