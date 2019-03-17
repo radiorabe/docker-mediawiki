@@ -142,6 +142,9 @@ wfLoadExtension( 'Interwiki' );
 wfLoadExtension( 'Renameuser' );
 wfLoadExtension( 'SyntaxHighlight_GeSHi' );
 wfLoadExtension( 'ParserFunctions' );
+if (getenv('MV_PARSERFUNCTIONS_ENABLE_STRING_FUNCTIONS')) {
+    $wgPFEnableStringFunctions = true;
+}
 
 # VisualEditor Extension
 wfLoadExtension( 'VisualEditor' );
