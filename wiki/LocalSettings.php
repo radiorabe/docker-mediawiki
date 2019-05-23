@@ -258,3 +258,7 @@ if (getenv('MW_AUTH_OIDC')) {
     $wgOpenIDConnect_MigrateUsersByEmail = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') ?: false;
     $wgOpenIDConnect_ForceLogout = getenv('MW_AUTH_OIDC_FORCE_LOGOUT') ?: false;
 }
+
+if (getenv('MW_FILE_EXTENSION_ALLOW_SVG')) {
+    $wgFileExtensions[] = 'svg';
+}
