@@ -65,6 +65,12 @@ FROM mediawiki:1.32
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
 
+RUN set -x; \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+    librsvg2-bin \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-install mbstring
 
 COPY --from=build /var/www/html /var/www/html
