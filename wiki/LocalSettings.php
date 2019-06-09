@@ -135,6 +135,14 @@ wfLoadSkin( 'Vector' );
 # This one is available on demand, move along, there is nothing to see here
 getenv('MW_SKIN_MATERIAL_ENABLE') !== false && wfLoadSkin( 'Material' );
 
+# Subpages
+if (getenv('MW_NS_WITH_SUBPAGES_MAIN')) {
+    $wgNamespacesWithSubpages[NS_MAIN] = true;
+}
+if (getenv('MW_NS_WITH_SUBPAGES_TEMPLATE')) {
+    $wgNamespacesWithSubpages[NS_TEMPLATE] = true;
+}
+
 # Enabled Extensions. Most extensions are enabled by including the base extension file here
 # but check specific extension documentation for more details
 # The following extensions were automatically enabled:
