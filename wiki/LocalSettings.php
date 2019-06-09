@@ -113,6 +113,13 @@ $wgSecretKey = getenv("MW_WG_SECRET");
 # web installer while LocalSettings.php is in place
 $wgUpgradeKey = getenv("MW_WG_UPGRADE_KEY") ?: "b31022590a7b3b8f";
 
+if (getenv('MW_DISABLE_API')) {
+    $wgEnableAPI = false;
+}
+if (getenv('MW_DISABLE_FEED')) {
+    $wgFeed = false;
+}
+
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
