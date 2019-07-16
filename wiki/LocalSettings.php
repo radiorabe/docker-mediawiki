@@ -194,8 +194,8 @@ if (getenv('MW_CATEGORYTREE_SIDEBAR_ROOT')) {
 # ExternalData
 wfLoadExtension( 'ExternalData' );
 
-if (getenv('MW_EXTERALDATA_DIRECTORY_PATH')) {
-    $edgDirectoryPath = json_decode(getenv('MW_EXTERALDATA_DIRECTORY_PATH'));
+if (getenv('MW_EXTERNALDATA_DIRECTORY_PATH')) {
+    $edgDirectoryPath = json_decode(getenv('MW_EXTERNALDATA_DIRECTORY_PATH'), true);
 }
 	
 # Semantic Stuff
