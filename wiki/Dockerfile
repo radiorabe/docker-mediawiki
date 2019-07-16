@@ -40,7 +40,10 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Arrays.git /var/www/html/extensions/Arrays
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /var/www/html/extensions/HeaderTabs
+# Workaround for https://github.com/wikimedia/mediawiki-extensions-HeaderTabs/pull/2
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /var/www/html/extensions/HeaderTabs \
+ && tail -n +2 /var/www/html/extensions/HeaderTabs/HeaderTabs.php > /tmp/HeaderTabs.php \
+ && mv /tmp/HeaderTabs.php /var/www/html/extensions/HeaderTabs/HeaderTabs.php
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ApprovedRevs.git /var/www/html/extensions/ApprovedRevs
 
