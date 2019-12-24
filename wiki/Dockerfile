@@ -6,6 +6,7 @@ RUN set -x; \
     apt-get update \
  && apt-get install -y --no-install-recommends \
     git \
+    libzip-dev \
     unzip \
     zlib1g-dev \
  && docker-php-ext-install \
