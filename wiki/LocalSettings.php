@@ -211,9 +211,9 @@ wfLoadExtension( 'PageForms' );
 wfLoadExtension( 'HierarchyBuilder' );
 
 # more exts
-require_once "$IP/extensions/Arrays/Arrays.php";
-require_once "$IP/extensions/HeaderTabs/HeaderTabs.php";
-require_once "$IP/extensions/ApprovedRevs/ApprovedRevs.php";
+wfLoadExtension( 'Arrays' );
+wfLoadExtension( 'HeaderTabs' );
+wfLoadExtension( 'ApprovedRevs' );
 
 # for easing migrations
 wfLoadExtension( 'ReplaceText' );

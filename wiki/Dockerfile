@@ -1,6 +1,6 @@
-FROM mediawiki:1.34 AS build
+FROM mediawiki:1.35 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_34
+ENV MEDIAWIKI_EXT_BRANCH REL1_35
 
 RUN set -x; \
     apt-get update \
@@ -21,50 +21,39 @@ COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
 RUN cd /var/www/html/ \
  && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
  && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-compound-queries "~1.2" --update-no-dev \
+ && composer require mediawiki/semantic-compound-queries "~2.1" --update-no-dev \
  && composer require jumbojett/openid-connect-php "0.5.0" --update-no-dev
 
 # Install extensions with a git based install
-RUN set -x; \
-    git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/VisualEditor.git /var/www/html/extensions/VisualEditor \
-    && cd /var/www/html/extensions/VisualEditor \
-    && git submodule update --init \
-    && chmod +x .
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/PageForms.git /var/www/html/extensions/PageForms
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/PageForms.git /var/www/html/extensions/PageForms
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Arrays.git /var/www/html/extensions/Arrays
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Arrays.git /var/www/html/extensions/Arrays
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/HeaderTabs.git /var/www/html/extensions/HeaderTabs
 
-# Workaround for https://github.com/wikimedia/mediawiki-extensions-HeaderTabs/pull/2
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HeaderTabs.git /var/www/html/extensions/HeaderTabs \
- && tail -n +2 /var/www/html/extensions/HeaderTabs/HeaderTabs.php > /tmp/HeaderTabs.php \
- && mv /tmp/HeaderTabs.php /var/www/html/extensions/HeaderTabs/HeaderTabs.php
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ApprovedRevs.git /var/www/html/extensions/ApprovedRevs
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/ApprovedRevs.git /var/www/html/extensions/ApprovedRevs
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/Auth_remoteuser.git /var/www/html/extensions/Auth_remoteuser
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/TemplateData.git /var/www/html/extensions/TemplateData
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/HierarchyBuilder.git /var/www/html/extensions/HierarchyBuilder
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/Auth_remoteuser.git /var/www/html/extensions/Auth_remoteuser
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/skins/Material.git /var/www/html/skins/Material
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/HierarchyBuilder.git /var/www/html/extensions/HierarchyBuilder
-
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/skins/Material.git /var/www/html/skins/Material
-
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/PluggableAuth.git /var/www/html/extensions/PluggableAuth
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/PluggableAuth.git /var/www/html/extensions/PluggableAuth
 
 # Needs workaround for until https://github.com/wikimedia/mediawiki-extensions-OpenIDConnect/commit/d123d847d1cc7d1c4bb451f53b5cdee90948eea3 is released
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect \
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect \
  && sed -i '/if ( $oidc->authenticate() ) {/i $oidc->setRedirectURL(getenv("MW_AUTH_OIDC_REDIRECT_URI"));' extensions/OpenIDConnect/src/OpenIDConnect.php
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/p/mediawiki/extensions/UserMerge.git /var/www/html/extensions/UserMerge
+RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/UserMerge.git /var/www/html/extensions/UserMerge
 
-FROM mediawiki:1.34
+FROM mediawiki:1.35
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
