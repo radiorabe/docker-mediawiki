@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: mediawiki
 
   wiki:
-    image: radiorabe/mediawiki:latest
+    image: ghcr.io/radiorabe/mediawiki:latest
     build: ./wiki
     ports:
       - "8081:80"
