@@ -120,6 +120,10 @@ if (getenv('MW_DISABLE_FEED')) {
     $wgFeed = false;
 }
 
+if (getenv('MW_REFERRER_POLICY')) {
+    $wgReferrerPolicy = getenv('MW_REFERRER_POLICY');
+}
+
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
@@ -214,6 +218,25 @@ wfLoadExtension( 'HierarchyBuilder' );
 wfLoadExtension( 'Arrays' );
 wfLoadExtension( 'HeaderTabs' );
 wfLoadExtension( 'ApprovedRevs' );
+
+# NativeSvgHandler needs opt-in due to xss concerns
+if (getenv('MW_NATIVESVGHANDLER')) {
+    wfLoadExtension( 'NativeSvgHandler' );
+}
+
+# draw.io, needs opt-in because you need to trust diagrams.net
+if (getenv('MW_DRAWIOEDITOR')) {
+    wfLoadExtension( 'DrawioEditor' );
+}
+if (getenv('MW_DRAWIOEDITOR_IMAGE_TYPE')) {
+    $wgDrawioEditorImageType = getenv('MW_DRAWIOEDITOR_IMAGE_TYPE');
+}
+if (getenv('MW_DRAWIOEDITOR_IMAGE_INTERACTIVE')) {
+    $wgDrawioEditorImageInteractive = true;
+}
+if (getenv('MW_DRAWIOEDITOR_BACKEND_URL')) {
+    $wgDrawioEditorBackendUrl = getenv('MW_DRAWIOEDITOR_BACKEND_URL');
+}
 
 # for easing migrations
 wfLoadExtension( 'ReplaceText' );
