@@ -164,6 +164,7 @@ wfLoadExtension( 'ParserFunctions' );
 if (getenv('MV_PARSERFUNCTIONS_ENABLE_STRING_FUNCTIONS')) {
     $wgPFEnableStringFunctions = true;
 }
+wfLoadExtension( 'ImageMap' );
 
 # VisualEditor Extension
 wfLoadExtension( 'VisualEditor' );
