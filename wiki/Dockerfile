@@ -13,7 +13,13 @@ RUN set -x; \
     zip \
  && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mbstring
+RUN set -x; \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+    libonig-dev \
+ && docker-php-ext-install \
+    mbstring \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
 
@@ -68,7 +74,13 @@ RUN set -x; \
     librsvg2-bin \
  && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mbstring
+RUN set -x; \
+    apt-get update \
+ && apt-get install -y --no-install-recommends \
+    libonig-dev \
+ && docker-php-ext-install \
+    mbstring \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /var/www/html /var/www/html
 

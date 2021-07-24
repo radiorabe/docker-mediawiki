@@ -3,11 +3,11 @@ name: Build Container Image
 on:
   push:
     branches:
-      - master
       - main
+  pull_request:
 
 jobs:
-  goreleaser:
+  container_image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,7 +33,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_PAT_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         id: docker_build
