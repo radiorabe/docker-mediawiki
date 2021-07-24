@@ -296,6 +296,8 @@ if (getenv('MW_AUTH_OIDC')) {
     $wgOpenIDConnect_MigrateUsersByUserName = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') ?: false;
     $wgOpenIDConnect_MigrateUsersByEmail = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') ?: false;
     $wgOpenIDConnect_ForceLogout = getenv('MW_AUTH_OIDC_FORCE_LOGOUT') ?: false;
+    // override this when you can't change the 'sub' claim because you want to update keycloak
+    $wgOpenIDConnect_SubjectUserInfoClaim = getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') ?: 'sub';
 }
 
 if (getenv('MW_FILE_EXTENSION_ALLOW_SVG')) {
