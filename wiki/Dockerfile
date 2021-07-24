@@ -21,7 +21,7 @@ RUN set -x; \
     mbstring \
  && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
