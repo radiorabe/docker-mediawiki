@@ -161,7 +161,7 @@ wfLoadExtension( 'Interwiki' );
 wfLoadExtension( 'Renameuser' );
 wfLoadExtension( 'SyntaxHighlight_GeSHi' );
 wfLoadExtension( 'ParserFunctions' );
-if (getenv('MV_PARSERFUNCTIONS_ENABLE_STRING_FUNCTIONS')) {
+if (getenv('MW_PARSERFUNCTIONS_ENABLE_STRING_FUNCTIONS')) {
     $wgPFEnableStringFunctions = true;
 }
 wfLoadExtension( 'ImageMap' );
@@ -302,4 +302,11 @@ if (getenv('MW_AUTH_OIDC')) {
 
 if (getenv('MW_FILE_EXTENSION_ALLOW_SVG')) {
     $wgFileExtensions[] = 'svg';
+}
+
+# Scribunto
+if (getenv('MW_SCRIBUNTO_ENABLE')) {
+    wfLoadExtension('Scribunto');
+    $wgScribuntoDefaultEngine = getenv('MW_SCRIBUNTO_DEFAULT_ENGINE') ?: 'luastandalone';
+    $wgScribuntoUseGeSHi = getenv('MW_SCRIBUNTO_USE_GESHI') ?: false;
 }
