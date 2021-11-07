@@ -50,6 +50,7 @@ jobs:
           cache-to: type=gha,mode=max
           
       - uses: azure/container-scan@v0.1
+        id: scan
         with:
           image-name: ${{ steps.docker_meta.outputs.tags }}
 
