@@ -50,10 +50,14 @@ jobs:
           cache-to: type=gha,mode=max
           
       - uses: azure/container-scan@v0.1
-        id: scan
+        id: container-image-scan
         continue-on-error: true
         with:
           image-name: ${{ steps.docker_meta.outputs.tags }}
+
+
+      - run: cat "${{ steps.container-image-scan.outputs.scan-report-path }}"
+        if: ${{ always() }}
 
       # https://github.com/Azure/container-scan/issues/95#issuecomment-962506492
       - name: Convert Container Scan Report to SARIF
@@ -61,8 +65,10 @@ jobs:
         uses: rm3l/container-scan-to-sarif-action@v1
         if: ${{ always() }}
         with:
-          converter-version: 0.4.0
-          input-file: ${{ steps.scan.outputs.scan-report-path }}
+          input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
+
+      - run: cat "${{ steps.scan-to-sarif.outputs.sarif-report-path }}"
+        if: ${{ always() }}
 
       - name: Upload SARIF reports to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
