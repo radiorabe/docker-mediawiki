@@ -77,7 +77,6 @@ jobs:
           context: ./wiki/
           file: ./wiki/Dockerfile
           platforms: linux/amd64
-          load: true
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
