@@ -4,7 +4,7 @@ ENV MEDIAWIKI_EXT_BRANCH REL1_36
 
 RUN set -x; \
     apt-get update \
- && apt-get upgrade \
+ && apt-get upgrade -y \
  && apt-get install -y --no-install-recommends \
     git \
     libzip-dev \
