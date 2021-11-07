@@ -59,13 +59,20 @@ jobs:
       - run: cat "${{ steps.container-image-scan.outputs.scan-report-path }}"
         if: ${{ always() }}
 
+      - id: scan-json-path
+        run: |
+          INNER_PATH=${{ steps.container-image-scan.outputs.scan-report-path }}
+          INNER_PATH=${INNER_PATH/\/home\/runner\/work\/docker-mediawiki\/docker-mediawiki/\/github\/workspace}
+          echo ::set-output name=scan-report-path::$INNER_PATH
+        if: ${{ always() }}
+
       # https://github.com/Azure/container-scan/issues/95#issuecomment-962506492
       - name: Convert Container Scan Report to SARIF
         id: scan-to-sarif
         uses: rm3l/container-scan-to-sarif-action@v1
         if: ${{ always() }}
         with:
-          input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
+          input-file: ${{ steps.scan-json-path.outputs.scan-report-path }}
 
       - run: cat "${{ steps.scan-to-sarif.outputs.sarif-report-path }}"
         if: ${{ always() }}
