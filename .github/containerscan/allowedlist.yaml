@@ -1,36 +1,28 @@
 ---
 general:
   vulnerabilities:
-  - CVE-2021-22945
-  - CVE-2021-30473
-  - CVE-2021-30474
-  - CVE-2021-30475
-  - CVE-2021-33574
+  # CVE-2021-29921: Python before 3.9.5
+  # at the time of writing this was not patched in upstream Debian,
+  # Python isn't in the critical path of this images runtime features
+  # so we allowlist this python update related CVE for now.
+  # https://bugs.python.org/issue36384#msg392423
   - CVE-2021-29921
-  - CVE-2021-43267
+  # CVE-2021-22945: libcurl MQTT data sending
+  # Mediawiki does not have any MQTT-via-libcurl features.
+  - CVE-2021-22945
+  # CVE-2021-22946: TLS bypass for IMAP, POP3 or FTP
+  # RaBe Wiki does not use IMAP, POP3 or FTP.
   - CVE-2021-22946
-  - CVE-2021-20309
-  - CVE-2021-20312
-  - CVE-2021-20313
-  - CVE-2021-43396
-  - CVE-2020-21598
+  # CVE-2020-23109: Buffer overflow vulnerability in libheif1
+  # RaBe Wiki does not support uploading HEIF files.
   - CVE-2020-23109
-  - CVE-2019-6706
-  - CVE-2021-3575
-  - CVE-2013-7445
-  - CVE-2019-19378
-  - CVE-2019-19449
-  - CVE-2019-19814
-  - CVE-2020-12362
-  - CVE-2020-26556
-  - CVE-2020-26557
-  - CVE-2020-26559
-  - CVE-2020-26560
-  - CVE-2021-3752
-  - CVE-2021-41864
-  - CVE-2021-42739
   bestPracticeViolations:
+  # CIS-DI-0001: Last user should not be root
+  # We build on an upstream Apache image as supported by Mediawiki.
+  # In this scenario Apache HTTPD drops privileges for us. Making
+  # httpd run as non root is complicated due to a variety of factors.
   - CIS-DI-0001
+  # CIS-DI-0005: Enable Content trust for Docker
+  # We do't currently have a strategy implemented to support content
+  # trust.
   - CIS-DI-0005
-  - CIS-DI-0008
-  - DKL-LI-0003
