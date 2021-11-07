@@ -80,6 +80,11 @@ RUN set -x; \
     libonig-dev \
  && docker-php-ext-install \
     mbstring \
+ && apt-get remove -y \
+    libc-dev-bin \
+    libc6-dev \
+    libonig-dev \
+    linux-libc-dev \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /var/www/html /var/www/html
