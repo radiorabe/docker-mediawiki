@@ -28,7 +28,7 @@ RUN cd /var/www/html/ \
  && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
  && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
  && composer require mediawiki/semantic-compound-queries "~2.1" --update-no-dev \
- && composer require jumbojett/openid-connect-php "0.5.0" --update-no-dev
+ && composer require jumbojett/openid-connect-php "0.9.1" --update-no-dev
 
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
