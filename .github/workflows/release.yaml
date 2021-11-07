@@ -72,6 +72,7 @@ jobs:
         uses: rm3l/container-scan-to-sarif-action@v1
         if: ${{ always() }}
         with:
+          converter-version: 0.4.0
           input-file: ${{ steps.scan-json-path.outputs.scan-report-path }}
 
       - run: cat "${{ steps.scan-to-sarif.outputs.sarif-report-path }}"
