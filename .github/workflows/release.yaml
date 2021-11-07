@@ -55,15 +55,6 @@ jobs:
         with:
           image-name: ${{ steps.docker_meta.outputs.tags }}
 
-      - id: scan-json-path
-        run: |
-          INNER_PATH=${{ steps.container-image-scan.outputs.scan-report-path }}
-          INNER_PATH=${INNER_PATH/\/home\/runner\/work\/docker-mediawiki\/docker-mediawiki/\/github\/workspace}
-          OUTPUT_PATH=/github/workspace/scanreport.sarif
-          echo ::set-output name=scan-report-path::$INNER_PATH
-          echo ::set-output name=sarif-report-path::$OUTPUT_PATH
-        if: ${{ always() }}
-
       # https://github.com/Azure/container-scan/issues/95#issuecomment-962506492
       - name: Convert Container Scan Report to SARIF
         id: scan-to-sarif
@@ -71,14 +62,13 @@ jobs:
         if: ${{ always() }}
         with:
           converter-version: 0.4.0
-          input-file: ${{ steps.scan-json-path.outputs.scan-report-path }}
-          output-file: ${{ steps.scan-json-path.outputs.sarif-report-path }}
+          input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
 
       - name: Upload SARIF reports to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v1
         if: ${{ always() }}
         with:
-          sarif_file: scanreport.sarif
+          sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
           
       - name: Push Container Image
         id: docker_push
