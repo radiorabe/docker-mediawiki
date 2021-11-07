@@ -91,3 +91,5 @@ COPY LocalSettings.php /var/www/html/LocalSettings.php
 COPY wiki-cmd.sh /usr/local/bin/wiki-cmd
 
 CMD ["wiki-cmd"]
+
+HEALTHCHECK CMD curl -f http://localhost/ || exit 1
