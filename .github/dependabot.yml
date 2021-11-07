@@ -8,3 +8,11 @@ updates:
     commit-message:
       prefix: "ci: "
     open-pull-requests-limit: 10
+    
+  - package-ecosystem: "docker"
+    directory: "/wiki"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "feat: "
+    open-pull-requests-limit: 5
