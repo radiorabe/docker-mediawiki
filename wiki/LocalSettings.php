@@ -150,9 +150,6 @@ getenv('MW_SKIN_MATERIAL_ENABLE') !== false && wfLoadSkin( 'Material' );
 if (getenv('MW_SKIN_VECTOR_DEFAULT_SKIN_VERSION')) {
     $wgVectorDefaultSkinVersion = getenv('MW_SKIN_VECTOR_DEFAULT_SKIN_VERSION');
 }
-if (getenv('MW_SKIN_VECTOR_USE_ICON_WATCH_ENABLE')) {
-    $wgVectorUseIconWatch = true;
-}
 if (getenv('MW_SKIN_VECTOR_RESPONSIVE_ENABLE')) {
     $wgVectorResponsive = true;
 }
