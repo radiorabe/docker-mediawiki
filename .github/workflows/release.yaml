@@ -59,7 +59,7 @@ jobs:
         run: |
           INNER_PATH=${{ steps.container-image-scan.outputs.scan-report-path }}
           INNER_PATH=${INNER_PATH/\/home\/runner\/work\/docker-mediawiki\/docker-mediawiki/\/github\/workspace}
-          OUTPUT_PATH=${INNER_PATH/scanreport.json/scanreport.sarif}
+          OUTPUT_PATH=/github/workspace/scanreport.sarif
           echo ::set-output name=scan-report-path::$INNER_PATH
           echo ::set-output name=sarif-report-path::$OUTPUT_PATH
         if: ${{ always() }}
@@ -78,7 +78,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         if: ${{ always() }}
         with:
-          sarif_file: ${{ steps.scan-json-path.outputs.sarif-report-path }}
+          sarif_file: scanreport.sarif
           
       - name: Push Container Image
         id: docker_push
