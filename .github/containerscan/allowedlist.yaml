@@ -1,4 +1,36 @@
 ---
 general:
-  vulnerabilities: []
-  bestPracticeViolations: []
+  vulnerabilities:
+  - CVE-2021-22945
+  - CVE-2021-30473
+  - CVE-2021-30474
+  - CVE-2021-30475
+  - CVE-2021-33574
+  - CVE-2021-29921
+  - CVE-2021-43267
+  - CVE-2021-22946
+  - CVE-2021-20309
+  - CVE-2021-20312
+  - CVE-2021-20313
+  - CVE-2021-43396
+  - CVE-2020-21598
+  - CVE-2020-23109
+  - CVE-2019-6706
+  - CVE-2021-3575
+  - CVE-2013-7445
+  - CVE-2019-19378
+  - CVE-2019-19449
+  - CVE-2019-19814
+  - CVE-2020-12362
+  - CVE-2020-26556
+  - CVE-2020-26557
+  - CVE-2020-26559
+  - CVE-2020-26560
+  - CVE-2021-3752
+  - CVE-2021-41864
+  - CVE-2021-42739
+  bestPracticeViolations:
+  - CIS-DI-0001
+  - CIS-DI-0005
+  - CIS-DI-0008
+  - DKL-LI-0003
