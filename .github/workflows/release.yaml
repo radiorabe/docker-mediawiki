@@ -23,10 +23,11 @@ jobs:
 
       - name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v3.6.0
+        uses: docker/metadata-action@v3.6.0
         with:
           images: ghcr.io/radiorabe/mediawiki
-          tag-sha: false
+          flavor: |
+            latest=auto
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
