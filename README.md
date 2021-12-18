@@ -10,6 +10,14 @@ visualeditor support (aka the works).
 docker-compose pull
 ```
 
+## Upgrading
+
+Before merging Mediawiki upgrades we need to check if all of our extensions are compatible with the new version. Special care needs to be
+taken with those extensions that are installed via composer and not using the `MEDIAWIKI_EXT_BRANCH` env variable in wiki/Dockerfile.
+
+Some extensions publish their own compatibility information.
+* [Semantic MediaWiki Compatibility Matrix](https://github.com/SemanticMediaWiki/SemanticMediaWiki/blob/master/docs/COMPATIBILITY.md)
+
 ## Configuration
 
 Configuration is done through environmaent variables. Most configurable aspects may be found in the docker-compose yaml files.
