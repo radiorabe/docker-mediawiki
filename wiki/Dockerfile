@@ -1,6 +1,6 @@
-FROM mediawiki:1.37.1 AS build
+FROM mediawiki:1.36 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_37
+ENV MEDIAWIKI_EXT_BRANCH REL1_36
 
 RUN set -x; \
     apt-get update \
@@ -63,7 +63,7 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/DrawioEditor.git /var/www/html/extensions/DrawioEditor
 
-FROM mediawiki:1.37.1
+FROM mediawiki:1.36
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
