@@ -27,6 +27,7 @@ COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 # Install composer based extensions
 RUN cd /var/www/html/ \
  && composer require mediawiki/semantic-media-wiki "~4.0" --update-no-dev \
+ && rm compose.lock \
  && composer require mediawiki/semantic-result-formats "~4.0" --update-no-dev \
  && composer require mediawiki/semantic-compound-queries "~2.2" --update-no-dev \
  && composer require jumbojett/openid-connect-php "0.9.5" --update-no-dev
