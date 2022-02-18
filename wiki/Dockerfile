@@ -1,6 +1,6 @@
 FROM mediawiki:1.37.1 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_36
+ENV MEDIAWIKI_EXT_BRANCH REL1_37
 
 RUN set -x; \
     apt-get update \
@@ -26,10 +26,10 @@ COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
- && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-compound-queries "~2.1" --update-no-dev \
- && composer require jumbojett/openid-connect-php "0.9.1" --update-no-dev
+ && composer require mediawiki/semantic-media-wiki "~4.0" --update-no-dev \
+ && composer require mediawiki/semantic-result-formats "~4.0" --update-no-dev \
+ && composer require mediawiki/semantic-compound-queries "~2.2" --update-no-dev \
+ && composer require jumbojett/openid-connect-php "0.9.5" --update-no-dev
 
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
