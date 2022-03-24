@@ -212,12 +212,11 @@ if (getenv('MW_EXTERNALDATA_DIRECTORY_PATH')) {
 }
 	
 # Semantic Stuff
-require_once "$IP/extensions/SemanticMediaWiki/SemanticMediaWiki.php";
-enableSemantics();
+wfLoadExtension( 'SemanticMediaWiki' );
+enableSemantics(getenv('MW_SMW_ENABLE_SEMANTICS_DOMAIN'));
 require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
-require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
-require_once "$IP/extensions/SemanticCompoundQueries/SemanticCompoundQueries.php";
-require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
+wfLoadExtension( 'SemanticCompoundQueries' );
+wfLoadExtension( 'SemanticDrilldown' );
 wfLoadExtension( 'PageForms' );
 
 # HierarchyBuilder Extension
