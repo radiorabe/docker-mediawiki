@@ -11,6 +11,7 @@ RUN set -x; \
     unzip \
     zlib1g-dev \
  && docker-php-ext-install \
+    calendar \
     zip \
  && rm -rf /var/lib/apt/lists/*
 
@@ -63,37 +64,38 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://github.com/wikimedia/mediawiki-extensions-DrawioEditor.git /var/www/html/extensions/DrawioEditor
 
-FROM mediawiki:1.36
+FROM ghcr.io/radiorabe/ubi8-minimal:0.2.2
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
 
-RUN set -x; \
-    apt-get update \
- && apt-get install -y --no-install-recommends \
-    librsvg2-bin \
- && rm -rf /var/lib/apt/lists/*
-
-RUN set -x; \
-    apt-get update \
- && apt-get install -y --no-install-recommends \
-    libonig-dev \
- && docker-php-ext-install \
-    mbstring \
- && apt-get remove -y \
-    libc-dev-bin \
-    libc6-dev \
-    libonig-dev \
-    linux-libc-dev \
- && rm -rf /var/lib/apt/lists/*
+RUN    microdnf module enable php:7.4 \
+    && microdnf update -y \
+    && microdnf install -y \
+         httpd \
+         php \
+         php-intl \
+         php-mbstring \
+         php-mysqlnd \
+    && microdnf remove -y php-fpm \
+    && sed --in-place \
+         -e '/LoadModule mpm_event_module/ s/^#*/#/' \
+         -e 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
+       /etc/httpd/conf.modules.d/00-mpm.conf \
+    && microdnf reinstall -y tzdata \
+    && microdnf clean all
 
 COPY --from=build /var/www/html /var/www/html
 
-COPY apache.conf /etc/apache2/conf-enabled/99-wiki.conf
+# override config w/o fpm
+COPY php.conf /etc/httpd/conf.d/php.conf
+COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
 
 COPY wiki-cmd.sh /usr/local/bin/wiki-cmd
+
+WORKDIR /var/www/html
 
 CMD ["wiki-cmd"]
 
