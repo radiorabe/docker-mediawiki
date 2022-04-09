@@ -1,6 +1,6 @@
-FROM mediawiki:1.36 AS build
+FROM mediawiki:1.37.1 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_36
+ENV MEDIAWIKI_EXT_BRANCH REL1_37
 
 RUN set -x; \
     apt-get update \
@@ -27,17 +27,32 @@ COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
- && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-compound-queries "~2.1" --update-no-dev \
- && composer require jumbojett/openid-connect-php "0.9.1" --update-no-dev
+ && composer require mediawiki/semantic-media-wiki "~4.0" --update-no-dev \
+ && rm composer.lock \
+ && composer require mediawiki/semantic-result-formats "~4.0" --update-no-dev \
+ && composer require mediawiki/semantic-compound-queries "~2.2" --update-no-dev \
+ && composer require jumbojett/openid-connect-php "0.9.5" --update-no-dev
 
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects
+# rm remove IDE aliases and add (hacky) compat for mw w/o SMWSQLStore2 (only v3)
+# TODO remove rm once ext can be installed using wfLoadExtension
+RUN    git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects \
+    && rm /var/www/html/extensions/SemanticMediaWiki/includes/IdeAliases.php \
+    && sed -i \
+         -e '/SMWSQLStore2/d' \
+       extensions/SemanticInternalObjects/SemanticInternalObjects.php \
+    && sed -i \
+         -e 's/SMWSQLStore2/SMWSQLStore3/' \
+       /var/www/html/extensions/SemanticInternalObjects/SemanticInternalObjects_body.php \
+    && composer dump-autoload
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown
+# Use a version from the main branch that can be loaded with wfLoadExtension
+# TODO remove after >v2.1 is release, probably in mw 1.38
+RUN    git clone https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown \
+    && cd /var/www/html/extensions/SemanticDrilldown \
+    && git reset --hard f59cae7785ecafc10cd42e289c06232a9d34e1fe
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/PageForms.git /var/www/html/extensions/PageForms
 
