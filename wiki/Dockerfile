@@ -79,6 +79,9 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://github.com/wikimedia/mediawiki-extensions-DrawioEditor.git /var/www/html/extensions/DrawioEditor
 
+# DKL-LI-0003: remove unnecessary files
+RUN rm -rf /var/www/html/extensions/*/.git
+
 FROM ghcr.io/radiorabe/ubi8-minimal:0.2.3
 
 LABEL vendor='Radio Bern RaBe' \
@@ -100,7 +103,8 @@ RUN    microdnf module enable php:7.4 \
          -e 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
        /etc/httpd/conf.modules.d/00-mpm.conf \
     && microdnf reinstall -y tzdata \
-    && microdnf clean all
+    && microdnf clean all \
+    && chmod u-s /usr/bin/gpasswd
 
 COPY --from=build /var/www/html /var/www/html
 
