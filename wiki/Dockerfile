@@ -80,7 +80,9 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://github.com/wikimedia/mediawiki-extensions-DrawioEditor.git /var/www/html/extensions/DrawioEditor
 
 # DKL-LI-0003: remove unnecessary files
-RUN rm -rf /var/www/html/extensions/*/.git
+RUN rm -rf \
+      /var/www/html/extensions/*/.git
+      /var/www/html/skins/*/.git
 
 FROM ghcr.io/radiorabe/ubi8-minimal:0.2.3
 
@@ -104,7 +106,9 @@ RUN    microdnf module enable php:7.4 \
        /etc/httpd/conf.modules.d/00-mpm.conf \
     && microdnf reinstall -y tzdata \
     && microdnf clean all \
-    && chmod u-s /usr/bin/gpasswd
+    && chmod u-s \
+         /usr/bin/gpasswd \
+         /usr/bin/umount
 
 COPY --from=build /var/www/html /var/www/html
 
