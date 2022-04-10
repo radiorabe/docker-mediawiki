@@ -92,7 +92,9 @@ RUN    microdnf module enable php:7.4 \
          php-intl \
          php-mbstring \
          php-mysqlnd \
-    && microdnf remove -y php-fpm \
+    && microdnf remove -y \
+         nginx-filesystem \
+         php-fpm \
     && sed --in-place \
          -e '/LoadModule mpm_event_module/ s/^#*/#/' \
          -e 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
