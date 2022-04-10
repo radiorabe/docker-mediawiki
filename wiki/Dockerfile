@@ -106,7 +106,9 @@ RUN    microdnf module enable php:7.4 \
        /etc/httpd/conf.modules.d/00-mpm.conf \
     && microdnf reinstall -y tzdata \
     && microdnf clean all \
-    && chmod a-s /usr/bin/*
+    && chmod a-s \
+         /usr/bin/* \
+         /usr/sbin/*
 
 COPY --from=build /var/www/html /var/www/html
 
