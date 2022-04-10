@@ -81,7 +81,7 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://github.com/wikimedia/me
 
 # DKL-LI-0003: remove unnecessary files
 RUN rm -rf \
-      /var/www/html/extensions/*/.git
+      /var/www/html/extensions/*/.git \
       /var/www/html/skins/*/.git
 
 FROM ghcr.io/radiorabe/ubi8-minimal:0.2.3
