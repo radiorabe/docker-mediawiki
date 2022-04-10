@@ -214,7 +214,6 @@ if (getenv('MW_EXTERNALDATA_DIRECTORY_PATH')) {
 # Semantic Stuff
 wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics(getenv('MW_SMW_ENABLE_SEMANTICS_DOMAIN'));
-require_once "$IP/extensions/SemanticInternalObjects/SemanticInternalObjects.php";
 wfLoadExtension( 'SemanticCompoundQueries' );
 wfLoadExtension( 'SemanticDrilldown' );
 wfLoadExtension( 'PageForms' );

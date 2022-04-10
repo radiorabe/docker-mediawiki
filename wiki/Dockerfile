@@ -36,18 +36,6 @@ RUN cd /var/www/html/ \
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
 
-# rm remove IDE aliases and add (hacky) compat for mw w/o SMWSQLStore2 (only v3)
-# TODO remove rm once ext can be installed using wfLoadExtension
-RUN    git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects \
-    && rm /var/www/html/extensions/SemanticMediaWiki/includes/IdeAliases.php \
-    && sed -i \
-         -e '/SMWSQLStore2/d' \
-       extensions/SemanticInternalObjects/SemanticInternalObjects.php \
-    && sed -i \
-         -e 's/SMWSQLStore2/SMWSQLStore3/' \
-       /var/www/html/extensions/SemanticInternalObjects/SemanticInternalObjects_body.php \
-    && composer dump-autoload
-
 # Use a version from the main branch that can be loaded with wfLoadExtension
 # TODO remove after >v2.1 is release, probably in mw 1.38
 RUN    git clone https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown \
