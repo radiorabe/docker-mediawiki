@@ -108,7 +108,8 @@ RUN    microdnf module enable php:7.4 \
     && microdnf clean all \
     && chmod a-s \
          /usr/bin/* \
-         /usr/sbin/*
+         /usr/sbin/* \
+         /usr/libexec/*/*
 
 COPY --from=build /var/www/html /var/www/html
 
