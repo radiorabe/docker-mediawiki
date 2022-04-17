@@ -92,6 +92,7 @@ ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
 # grab entrypoint scripts from fedora since noone are available from ubi8
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/libexec/httpd-prepare /usr/libexec/
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/run-httpd /usr/bin/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /usr/bin/
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
 
 RUN    microdnf module enable php:7.4 \
