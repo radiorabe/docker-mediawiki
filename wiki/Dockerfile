@@ -89,7 +89,7 @@ ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
     HTTPD_DATA_ORIG_PATH=/var/www \
     HTTPD_LOG_PATH=/var/log/httpd
 
-# grab entrypoint scripts from fedora since noone are available from ubi8
+# grab entrypoint scripts from fedora since no public cs8 images have them
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/libexec/httpd-prepare /usr/libexec/
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/run-httpd /usr/bin/
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /usr/bin/
@@ -118,8 +118,8 @@ RUN    microdnf module enable php:7.4 \
          nginx-filesystem \
          php-fpm \
     && sed --in-place \
-         -e '/LoadModule mpm_event_module/ s/^#*/#/' \
-         -e 's/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
+         --expression='/LoadModule mpm_event_module/ s/^#*/#/' \
+         --expression='s/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
        /etc/httpd/conf.modules.d/00-mpm.conf \
     && microdnf reinstall -y tzdata \
     && microdnf clean all \
@@ -135,8 +135,6 @@ RUN    microdnf module enable php:7.4 \
 
 COPY --from=build /var/www/html /var/www/html
 
-# override config w/o fpm
-COPY php.conf /etc/httpd/conf.d/php.conf
 COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
@@ -146,7 +144,9 @@ COPY run-wiki /usr/bin/run-wiki
 WORKDIR /var/www/html
 
 # like upstreams prep but deactivate chmoding ssl certs first
-RUN    sed --in-place --expression='/localhost/ s/^/#/' /usr/libexec/httpd-prepare \
+RUN    sed --in-place \
+         --expression='/localhost/ s/^/#/' \
+         /usr/libexec/httpd-prepare \
     && /usr/libexec/httpd-prepare \
     && rpm-file-permissions
 
