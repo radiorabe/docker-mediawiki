@@ -4,7 +4,7 @@ This repo contains an opinionated installation of MediaWiki. It has all the
 semantic wiki extensions installed and configured and is configured with
 visualeditor support (aka the works).
 
-The mediawiki container image is based on the [RaBe Universal Base Image 8 Minimal(https://github.com/radiorabe/container-image-ubi8-minimal)
+The mediawiki container image is based on the [RaBe Universal Base Image 8 Minimal](https://github.com/radiorabe/container-image-ubi8-minimal)
 base image. The mediawiki source is copied from the upstream Mediawiki Container
 image and it uses modular RPMs to install Apache 2.4 and `mod_php`.
 
