@@ -17,7 +17,7 @@ services:
       # use your own 64-character random string here! This example is compromised by definition
       MW_WG_SECRET: "1a0e46df5a9081c7c790dbf60588eea56c87c9634e155572cc2da879147539a3"
       # external server name
-      MW_WG_SERVER: http://wiki.vcap.me:8081
+      MW_WG_SERVER: http://wiki.example.org
       # Changeme
       # MW_WG_SECRET: ""
       MW_WG_SITENAME: RaBeWiki
@@ -35,6 +35,8 @@ services:
       # MW_DEBUG: "true"
       # Set the redirect_uri to use, needed for OpenID Connect until we get rid of the sed patch in wiki/Dockerfile
       # MW_AUTH_OIDC_REDIRECT_URI: URL/to/Special:PluggableAuthLogin
+      # hostname for SemanticMediawiki extentsion
+      MW_SMW_ENABLE_SEMANTICS_DOMAIN: wiki.example.org
   backup:
     volumes: []
       # where to store backups (default ./backup)

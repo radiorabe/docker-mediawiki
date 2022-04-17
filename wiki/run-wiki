@@ -5,8 +5,13 @@ if [ -f /usr/local/share/ca-certificates/ca.crt ]; then
     update-ca-certificates
 fi
 
+# TODO: make work with certs injected via httpd-tls folder as per scl docs
+if [ ! -f /etc/pki/tls/certs/localhost.crt ]; then
+	/usr/libexec/httpd-ssl-gencerts
+fi
+
 if [ ! -f ./extensions/SemanticMediaWiki/.smw.json ]; then
     php maintenance/update.php --skip-external-dependencies --quick
 fi
 
-exec apache2-foreground -DFOREGROUND "$@"
+exec /usr/bin/run-httpd "$@"

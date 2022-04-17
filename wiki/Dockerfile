@@ -1,6 +1,6 @@
-FROM mediawiki:1.36 AS build
+FROM mediawiki:1.37.1 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_36
+ENV MEDIAWIKI_EXT_BRANCH REL1_37
 
 RUN set -x; \
     apt-get update \
@@ -11,6 +11,7 @@ RUN set -x; \
     unzip \
     zlib1g-dev \
  && docker-php-ext-install \
+    calendar \
     zip \
  && rm -rf /var/lib/apt/lists/*
 
@@ -26,17 +27,20 @@ COPY --from=composer:2.1 /usr/bin/composer /usr/bin/composer
 
 # Install composer based extensions
 RUN cd /var/www/html/ \
- && composer require mediawiki/semantic-media-wiki "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-result-formats "~3.0" --update-no-dev \
- && composer require mediawiki/semantic-compound-queries "~2.1" --update-no-dev \
- && composer require jumbojett/openid-connect-php "0.9.1" --update-no-dev
+ && composer require mediawiki/semantic-media-wiki "~4.0" --update-no-dev \
+ && rm composer.lock \
+ && composer require mediawiki/semantic-result-formats "~4.0" --update-no-dev \
+ && composer require mediawiki/semantic-compound-queries "~2.2" --update-no-dev \
+ && composer require jumbojett/openid-connect-php "0.9.5" --update-no-dev
 
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
 
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticInternalObjects.git /var/www/html/extensions/SemanticInternalObjects
-
-RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown
+# Use a version from the main branch that can be loaded with wfLoadExtension
+# TODO remove after >v2.1 is release, probably in mw 1.38
+RUN    git clone https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown \
+    && cd /var/www/html/extensions/SemanticDrilldown \
+    && git reset --hard f59cae7785ecafc10cd42e289c06232a9d34e1fe
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/PageForms.git /var/www/html/extensions/PageForms
 
@@ -63,38 +67,91 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://github.com/wikimedia/mediawiki-extensions-DrawioEditor.git /var/www/html/extensions/DrawioEditor
 
-FROM mediawiki:1.36
+# DKL-LI-0003: remove unnecessary files
+RUN rm -rf \
+      /var/www/html/extensions/*/.git \
+      /var/www/html/skins/*/.git
+
+FROM ghcr.io/radiorabe/ubi8-minimal:0.2.4
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
 
-RUN set -x; \
-    apt-get update \
- && apt-get install -y --no-install-recommends \
-    librsvg2-bin \
- && rm -rf /var/lib/apt/lists/*
+ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
+    HTTPD_APP_ROOT=/var/www/html \
+    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/httpd.d \
+    HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
+    HTTPD_MAIN_CONF_MODULES_D_PATH=/etc/httpd/conf.modules.d \
+    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
+    HTTPD_TLS_CERT_PATH=/etc/httpd/tls \
+    HTTPD_VAR_RUN=/var/run/httpd \
+    HTTPD_DATA_PATH=/var/www \
+    HTTPD_DATA_ORIG_PATH=/var/www \
+    HTTPD_LOG_PATH=/var/log/httpd
 
-RUN set -x; \
-    apt-get update \
- && apt-get install -y --no-install-recommends \
-    libonig-dev \
- && docker-php-ext-install \
-    mbstring \
- && apt-get remove -y \
-    libc-dev-bin \
-    libc6-dev \
-    libonig-dev \
-    linux-libc-dev \
- && rm -rf /var/lib/apt/lists/*
+# grab entrypoint scripts from fedora since no public cs8 images have them
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/libexec/httpd-prepare /usr/libexec/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/run-httpd /usr/bin/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /usr/bin/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
+
+RUN    microdnf module enable php:7.4 \
+    && microdnf update -y \
+    && microdnf install -y \
+         bind-utils \
+         findutils \
+         gettext \
+         hostname \
+         httpd \
+         mod_security \
+         mod_session \
+         mod_ssl \
+         nss_wrapper \
+         php \
+         php-intl \
+         php-mbstring \
+         php-mysqlnd \
+         sscg \
+    && find /var/www/html -uid 1000 -exec chown 48 {} \; \
+    && find /var/www/html -gid 1000 -exec chgrp 48 {} \; \
+    && microdnf remove -y \
+         nginx-filesystem \
+         php-fpm \
+    && sed --in-place \
+         --expression='/LoadModule mpm_event_module/ s/^#*/#/' \
+         --expression='s/#LoadModule mpm_prefork_module/LoadModule mpm_prefork_module/' \
+       /etc/httpd/conf.modules.d/00-mpm.conf \
+    && microdnf reinstall -y tzdata \
+    && microdnf clean all \
+    && chmod a-s \
+         /usr/bin/* \
+         /usr/sbin/* \
+         /usr/libexec/*/* \
+    && useradd -u 1001 -r -g 0 -s /sbin/nologin \
+         -c "Default Application User" default \
+    && chown 1001:0 \
+         /etc/pki/tls/certs/ \
+         /etc/pki/tls/private/
 
 COPY --from=build /var/www/html /var/www/html
 
-COPY apache.conf /etc/apache2/conf-enabled/99-wiki.conf
+COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
 
-COPY wiki-cmd.sh /usr/local/bin/wiki-cmd
+COPY run-wiki /usr/bin/run-wiki
 
-CMD ["wiki-cmd"]
+WORKDIR /var/www/html
+
+# like upstreams prep but deactivate chmoding ssl certs first
+RUN    sed --in-place \
+         --expression='/localhost/ s/^/#/' \
+         /usr/libexec/httpd-prepare \
+    && /usr/libexec/httpd-prepare \
+    && rpm-file-permissions
+
+USER 1001
+
+CMD ["run-wiki"]
 
 HEALTHCHECK CMD curl -f http://localhost/ || exit 1
