@@ -126,7 +126,12 @@ RUN    microdnf module enable php:7.4 \
     && chmod a-s \
          /usr/bin/* \
          /usr/sbin/* \
-         /usr/libexec/*/*
+         /usr/libexec/*/* \
+    && useradd -u 1001 -r -g 0 -s /sbin/nologin \
+         -c "Default Application User" default \
+    && chown 1001:0 \
+         /etc/pki/tls/certs/ \
+         /etc/pki/tls/private/
 
 COPY --from=build /var/www/html /var/www/html
 
