@@ -32,7 +32,7 @@ services:
 
         # Configure Parsoid to point to your MediaWiki instances.
         mwApis:
-        - uri: 'http://wiki/api.php'
+        - uri: 'http://wiki:8080/api.php'
           domain: wiki
           # The "domain" is used for communication with Visual Editor
           # and RESTBase.  It defaults to the hostname portion of
