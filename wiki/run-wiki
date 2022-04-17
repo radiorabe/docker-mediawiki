@@ -9,4 +9,4 @@ if [ ! -f ./extensions/SemanticMediaWiki/.smw.json ]; then
     php maintenance/update.php --skip-external-dependencies --quick
 fi
 
-exec httpd -D FOREGROUND "$@"
+exec /usr/bin/run-httpd "$@"

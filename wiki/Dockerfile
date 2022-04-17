@@ -77,14 +77,42 @@ FROM ghcr.io/radiorabe/ubi8-minimal:0.2.4
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
 
+ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
+    HTTPD_APP_ROOT=/var/www/html \
+    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/httpd.d \
+    HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
+    HTTPD_MAIN_CONF_MODULES_D_PATH=/etc/httpd/conf.modules.d \
+    HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
+    HTTPD_TLS_CERT_PATH=/etc/httpd/tls \
+    HTTPD_VAR_RUN=/var/run/httpd \
+    HTTPD_DATA_PATH=/var/www \
+    HTTPD_DATA_ORIG_PATH=/var/www \
+    HTTPD_LOG_PATH=/var/log/httpd
+
+# grab entrypoint scripts from fedora since noone are available from ubi8
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/libexec/httpd-prepare /usr/libexec/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/run-httpd /usr/bin/
+COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
+
 RUN    microdnf module enable php:7.4 \
     && microdnf update -y \
     && microdnf install -y \
+         bind-utils \
+         findutils \
+         gettext \
+         hostname \
          httpd \
+         mod_security \
+         mod_session \
+         mod_ssl \
+         nss_wrapper \
          php \
          php-intl \
          php-mbstring \
          php-mysqlnd \
+         sscg \
+    && find /var/www/html -uid 1000 -exec chown 48 {} \; \
+    && find /var/www/html -gid 1000 -exec chgrp 48 {} \; \
     && microdnf remove -y \
          nginx-filesystem \
          php-fpm \
@@ -107,10 +135,17 @@ COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
 
-COPY wiki-cmd.sh /usr/local/bin/wiki-cmd
+COPY run-wiki /usr/bin/run-wiki
 
 WORKDIR /var/www/html
 
-CMD ["wiki-cmd"]
+# like upstreams prep but deactivate chmoding ssl certs first
+RUN    sed --in-place --expression='/localhost/ s/^/#/' /usr/libexec/httpd-prepare \
+    && /usr/libexec/httpd-prepare \
+    && rpm-file-permissions
+
+USER 1001
+
+CMD ["run-wiki"]
 
 HEALTHCHECK CMD curl -f http://localhost/ || exit 1
