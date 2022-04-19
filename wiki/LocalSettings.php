@@ -186,12 +186,14 @@ $wgDefaultUserOptions['visualeditor-enable'] = 1;
 # OPTIONAL: Enable VisualEditor's experimental code features
 # #$wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
 
+wfLoadExtension( 'Parsoid', 'vendor/wikimedia/parsoid/extension.json' );
 $wgVirtualRestConfig['modules']['parsoid'] = array(
   // URL to the Parsoid instance
-  'url' => getenv("MW_WG_PARSOID_URL") ?: 'http://parsoid:8000',
-  'domain' => 'wiki',
-  'prefix' => '',
-  'forwardCookies' => true,
+  // Note! This is a server to server URL (it must be valid within your VM/container)
+  'url' => getenv("MW_WG_PARSOID_URL") ?: 'http://localhost:8080/rest.php',
+  // for the embedded parsoid to work in a container and return a 400 error
+  // we need to tell the editor that the url above is "fixed".
+  'fixedUrl' => true,
 );
 
 # TemplateData Extension

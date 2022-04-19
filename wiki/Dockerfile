@@ -135,6 +135,13 @@ RUN    microdnf module enable php:7.4 \
 
 COPY --from=build /var/www/html /var/www/html
 
+# like upstreams prep but deactivate chmoding ssl certs first
+RUN    sed --in-place \
+         --expression='/localhost/ s/^/#/' \
+         /usr/libexec/httpd-prepare \
+    && /usr/libexec/httpd-prepare \
+    && rpm-file-permissions
+
 COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
 
 COPY LocalSettings.php /var/www/html/LocalSettings.php 
@@ -143,15 +150,8 @@ COPY run-wiki /usr/bin/run-wiki
 
 WORKDIR /var/www/html
 
-# like upstreams prep but deactivate chmoding ssl certs first
-RUN    sed --in-place \
-         --expression='/localhost/ s/^/#/' \
-         /usr/libexec/httpd-prepare \
-    && /usr/libexec/httpd-prepare \
-    && rpm-file-permissions
-
 USER 1001
 
 CMD ["run-wiki"]
 
-HEALTHCHECK CMD curl -f http://localhost/ || exit 1
+HEALTHCHECK CMD curl -f http://localhost:8080/ || exit 1
