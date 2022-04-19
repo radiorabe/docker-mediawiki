@@ -45,9 +45,3 @@ services:
       MYSQL_PASSWORD: secret
       # How many days of backups to keep
       # BACKUP_RETENTION: 14
-  # parsoid is currently configured with sane defaults by the config in the parsoid subdirectory
-  # It is not exposed except through this mediawiki instance. As such you probably don't need to
-  # override anything below.
-  #parsoid:
-  #  environment:
-  #    VIRTUAL_HOST: parsoid.vcap.me

@@ -21,11 +21,6 @@ services:
     volumes:
       - ./images:/var/www/html/images
 
-  parsoid:
-    image: benhutchins/parsoid:latest
-    volumes:
-      - "./parsoid/:/data/"
-
   backup:
     image: schnitzler/mysqldump
     volumes:
