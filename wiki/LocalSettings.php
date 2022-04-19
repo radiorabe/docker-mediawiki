@@ -186,7 +186,6 @@ $wgDefaultUserOptions['visualeditor-enable'] = 1;
 # OPTIONAL: Enable VisualEditor's experimental code features
 # #$wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
 
-
 wfLoadExtension( 'Parsoid', 'vendor/wikimedia/parsoid/extension.json' );
 $wgVirtualRestConfig['modules']['parsoid'] = array(
   // URL to the Parsoid instance
