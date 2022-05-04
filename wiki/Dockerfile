@@ -96,7 +96,7 @@ COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
 
 RUN    microdnf module enable php:7.4 \
-    && dnf install -y \
+    && microdnf install -y \
          epel-release \
     && microdnf update -y \
     && microdnf install -y \
