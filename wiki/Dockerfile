@@ -97,7 +97,7 @@ COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/ht
 
 RUN    microdnf module enable php:7.4 \
     && microdnf install -y \
-         epel-release \
+         https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
     && microdnf update -y \
     && microdnf install -y \
          --enablerepo="powertools" \
