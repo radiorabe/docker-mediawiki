@@ -100,7 +100,7 @@ RUN    microdnf module enable php:7.4 \
          https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
     && microdnf update -y \
     && microdnf install -y \
-         --enablerepo="PowerTools" \
+         --enablerepo="ubi-8-codeready-builder" \
          bind-utils \
          findutils \
          gettext \
