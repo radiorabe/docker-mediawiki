@@ -64,7 +64,7 @@ jobs:
           input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
 
       - name: Upload SARIF reports to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         if: ${{ always() }}
         with:
           sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
