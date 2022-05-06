@@ -58,7 +58,7 @@ jobs:
       # https://github.com/Azure/container-scan/issues/95#issuecomment-962506492
       - name: Convert Container Scan Report to SARIF
         id: scan-to-sarif
-        uses: rm3l/container-scan-to-sarif-action@v1.6.0
+        uses: rm3l/container-scan-to-sarif-action@v1.7.0
         if: ${{ always() }}
         with:
           input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
