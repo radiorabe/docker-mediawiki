@@ -96,13 +96,24 @@ COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /
 COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
 
 RUN    microdnf module enable php:7.4 \
+    && rpm -hiv \
+         https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \
     && microdnf update -y \
     && microdnf install -y \
+         jasper-libs \
+         lcms2 \
+         libgomp \
+         libjpeg-turbo \
+    && rpm -hiv \
+         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/LibRaw-0.19.5-2.el8.x86_64.rpm \
+    && microdnf install -y \
+         --enablerepo="ubi-8-codeready-builder" \
          bind-utils \
          findutils \
          gettext \
          hostname \
          httpd \
+         ImageMagick \
          mod_security \
          mod_session \
          mod_ssl \
