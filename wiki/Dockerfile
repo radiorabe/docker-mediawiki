@@ -114,7 +114,6 @@ RUN    microdnf module enable php:7.4 \
          hostname \
          httpd \
          ImageMagick \
-         LibRaw \
          mod_security \
          mod_session \
          mod_ssl \
