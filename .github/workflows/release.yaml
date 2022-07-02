@@ -2,6 +2,8 @@ name: Build Container Image
 
 on:
   push:
+    tags:
+      - 'v*.*.*'
     branches:
       - main
   pull_request:
@@ -31,8 +33,14 @@ jobs:
         uses: docker/metadata-action@v4.0.1
         with:
           images: ghcr.io/radiorabe/mediawiki
-          flavor: |
-            latest=auto
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
           labels: |
             name=rabe-mediawiki
             summary=${{ github.event.repository.description }}
@@ -73,6 +81,7 @@ jobs:
           image-ref: 'ghcr.io/radiorabe/mediawiki:${{ steps.meta.outputs.version }}'
           format: 'sarif'
           ignore-unfixed: true
+          skip-dirs: /var/www/html/vendor
           output: 'trivy-results.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
