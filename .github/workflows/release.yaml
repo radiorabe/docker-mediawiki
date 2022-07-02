@@ -21,13 +21,29 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2.0.0
 
+      - name: Prepare additional Metadata
+        id: addtional_meta
+        run: |
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+
       - name: Docker meta
-        id: docker_meta
+        id: meta
         uses: docker/metadata-action@v4.0.1
         with:
           images: ghcr.io/radiorabe/mediawiki
           flavor: |
             latest=auto
+          labels: |
+            name=rabe-mediawiki
+            summary=${{ github.event.repository.description }}
+            url=${{ github.event.repository.html_url }}
+            vcs-ref=${{ github.sha }}
+            revision=${{ github.sha }}
+            release=${{ github.sha }}
+            build-date=${{ steps.addtional_meta.outputs.created }}
+            io.k8s.display-name=RaBe Mediawiki
+            io.k8s.description=${{ github.event.repository.description }}
+            io.openshift.tags=minimal rhel8 rabe mediawiki
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2.0.0
@@ -45,30 +61,26 @@ jobs:
           platforms: linux/amd64
           load: true
           push: false
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            version=${{ steps.meta.outputs.version }}
           cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/radiorabe/mediawiki:${{ steps.meta.outputs.version }}'
+          format: 'sarif'
+          ignore-unfixed: true
+          output: 'trivy-results.sarif'
           
-      - uses: azure/container-scan@v0.1
-        id: container-image-scan
-        continue-on-error: true
-        with:
-          image-name: ${{ steps.docker_meta.outputs.tags }}
-
-      # https://github.com/Azure/container-scan/issues/95#issuecomment-962506492
-      - name: Convert Container Scan Report to SARIF
-        id: scan-to-sarif
-        uses: rm3l/container-scan-to-sarif-action@v1.7.0
-        if: ${{ always() }}
-        with:
-          input-file: ${{ steps.container-image-scan.outputs.scan-report-path }}
-
-      - name: Upload SARIF reports to GitHub Security tab
+      - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
-        if: ${{ always() }}
+        if: always()
         with:
-          sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
-          
+          sarif_file: 'trivy-results.sarif'
+
       - name: Push Container Image
         id: docker_push
         uses: docker/build-push-action@v3.0.0
@@ -77,6 +89,8 @@ jobs:
           file: ./wiki/Dockerfile
           platforms: linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            ${{ steps.meta.outputs.labels }}
+            version=${{ steps.meta.outputs.version }}
           cache-from: type=gha
