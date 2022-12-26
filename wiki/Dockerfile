@@ -89,11 +89,11 @@ ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
     HTTPD_DATA_ORIG_PATH=/var/www \
     HTTPD_LOG_PATH=/var/log/httpd
 
-# grab entrypoint scripts from fedora since no public cs8 images have them
-COPY --from=registry.fedoraproject.org/f29/httpd /usr/libexec/httpd-prepare /usr/libexec/
-COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/run-httpd /usr/bin/
-COPY --from=registry.fedoraproject.org/f29/httpd /usr/bin/rpm-file-permissions /usr/bin/
-COPY --from=registry.fedoraproject.org/f29/httpd /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
+# grab entrypoint scripts from an ubi8 image
+COPY --from=registry.access.redhat.com/ubi8/httpd-24 /usr/libexec/httpd-prepare /usr/libexec/
+COPY --from=registry.access.redhat.com/ubi8/httpd-24 /usr/bin/run-httpd /usr/bin/
+COPY --from=registry.access.redhat.com/ubi8/httpd-24 /usr/bin/rpm-file-permissions /usr/bin/
+COPY --from=registry.access.redhat.com/ubi8/httpd-24 /usr/share/container-scripts/httpd /usr/share/container-scripts/httpd
 
 RUN    microdnf module enable php:7.4 \
     && rpm -hiv \
@@ -146,11 +146,7 @@ RUN    microdnf module enable php:7.4 \
 
 COPY --from=build /var/www/html /var/www/html
 
-# like upstreams prep but deactivate chmoding ssl certs first
-RUN    sed --in-place \
-         --expression='/localhost/ s/^/#/' \
-         /usr/libexec/httpd-prepare \
-    && /usr/libexec/httpd-prepare \
+RUN    /usr/libexec/httpd-prepare \
     && rpm-file-permissions
 
 COPY apache.conf /etc/httpd/conf.d/99-wiki.conf
