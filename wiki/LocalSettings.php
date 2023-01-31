@@ -47,6 +47,11 @@ $wgStylePath = "$wgScriptPath/skins";
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogo = getenv("MW_WG_LOGO") ?: "$wgScriptPath/resources/assets/wiki.png";
 
+## The relative URL path to the favicon.  Should be a path to a Favicon.ico file.
+if (getenv("MW_FAVICON")) {
+    $wgFavicon = getenv("MW_FAVICON");
+}
+
 ## UPO means: this is also a user preference option
 
 $wgEnableEmail = getenv("MW_WG_ENABLE_EMAIL") ?: false;
