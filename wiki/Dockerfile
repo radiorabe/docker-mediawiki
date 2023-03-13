@@ -38,7 +38,7 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 # Use a version from the main branch that can be loaded with wfLoadExtension
 # TODO remove after >v2.1 is release, probably in mw 1.38
-RUN    git clone https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown \
+RUN    git clone https://github.com/SemanticMediaWiki/SemanticDrilldown.git /var/www/html/extensions/SemanticDrilldown \
     && cd /var/www/html/extensions/SemanticDrilldown \
     && git reset --hard f59cae7785ecafc10cd42e289c06232a9d34e1fe
 
