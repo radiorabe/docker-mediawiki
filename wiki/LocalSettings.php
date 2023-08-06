@@ -65,20 +65,20 @@ $wgEnotifWatchlist = false; # UPO
 $wgEmailAuthentication = true;
 
 ## Database settings
-$wgDBtype = "mysql";
-$wgDBserver = "mysql";
-$wgDBname = "mediawiki";
+$wgDBtype = getenv("MW_WG_DBTYPE") ?: "mysql";
+$wgDBserver = getenv("MW_WG_DBSERVER") ?: "mysql";
+$wgDBname = getenv("MW_WG_DBNAME") ?: "mediawiki";
 $wgDBuser = getenv('MW_WG_DBUSER');
 $wgDBpassword = getenv('MW_WG_DBPASS');
 
 # MySQL specific settings
-$wgDBprefix = "";
+$wgDBprefix = getenv("MW_WG_DBPREFIX") ?: "";
 
 # MySQL table options to use during installation or update
-$wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=utf8";
+$wgDBTableOptions = getenv("MW_WG_DBTABLEOPTIONS") ?: "ENGINE=InnoDB, DEFAULT CHARSET=utf8";
 
 # Experimental charset support for MySQL 5.0.
-$wgDBmysql5 = true;
+$wgDBmysql5 = getenv("MW_WG_DBMYSQL5") ? (bool) getenv("MW_WG_DBMYSQL5") : true;
 
 ## Shared memory settings
 $wgMainCacheType = CACHE_NONE;
@@ -222,7 +222,6 @@ if (getenv('MW_EXTERNALDATA_DIRECTORY_PATH')) {
 wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics(getenv('MW_SMW_ENABLE_SEMANTICS_DOMAIN'));
 wfLoadExtension( 'SemanticCompoundQueries' );
-wfLoadExtension( 'SemanticDrilldown' );
 wfLoadExtension( 'PageForms' );
 
 # HierarchyBuilder Extension
