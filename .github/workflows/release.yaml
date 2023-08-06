@@ -30,7 +30,7 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v4.3.0
+        uses: docker/metadata-action@v4.6.0
         with:
           images: ghcr.io/radiorabe/mediawiki
           tags: |
