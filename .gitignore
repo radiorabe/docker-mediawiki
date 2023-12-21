@@ -1,3 +1,4 @@
 mysql_backups/
 image_backups/
 docker-compose.override.yml
+trivy.*

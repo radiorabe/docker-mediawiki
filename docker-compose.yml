@@ -12,12 +12,12 @@ services:
     ports:
       - "8081:80"
     environment:
-      MW_WG_SERVER: ~
+      MW_WG_SERVER: ""
       MW_WG_DBUSER: root
       MW_WG_DBPASS: secret
       MW_WG_LANGUAGECODE: en
       MW_WG_RAWHTML: 'false'
-      MW_WG_SECRET: ~
+      MW_WG_SECRET: ""
     volumes:
       - ./images:/var/www/html/images
 
