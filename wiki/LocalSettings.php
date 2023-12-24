@@ -257,7 +257,7 @@ $wgGroupPermissions['bureaucrat']['replacetext'] = true;
 
 if (getenv("MW_USERMERGE")) {
     wfLoadExtension( 'UserMerge' );
-    $wgGroupPermissions['bureaucrat']['usermerge'] = getenv('MW_PERMISSION_BUREAUCRAT_USERMERGE') ?: false;;
+    $wgGroupPermissions['bureaucrat']['usermerge'] = getenv('MW_PERMISSION_BUREAUCRAT_USERMERGE') ? true : false;
 }
 
 if (getenv('MW_WG_RAWHTML') === 'true') {
@@ -265,20 +265,20 @@ if (getenv('MW_WG_RAWHTML') === 'true') {
 }
 
 # Rights config
-$wgGroupPermissions['*']['read'] = getenv("MW_PERMISSIONS_READ") ?: true;
-$wgGroupPermissions['user']['read'] = getenv("MW_PERMISSIONS_USER_READ") ?: true;
+$wgGroupPermissions['*']['read'] = getenv("MW_PERMISSIONS_READ") ? false : true;
+$wgGroupPermissions['user']['read'] = getenv("MW_PERMISSIONS_USER_READ") ? false : true;
 
-$wgGroupPermissions['*']['edit'] = getenv("MW_PERMISSIONS_EDIT") ?: true;
-$wgGroupPermissions['user']['edit'] = getenv("MW_PERMISSIONS_USER_EDIT") ?: true;
+$wgGroupPermissions['*']['edit'] = getenv("MW_PERMISSIONS_EDIT") ? false : true;
+$wgGroupPermissions['user']['edit'] = getenv("MW_PERMISSIONS_USER_EDIT") ? false : true;
 
-$wgGroupPermissions['*']['createpage'] = getenv("MW_PERMISSIONS_CREATEPAGE") ?: true;
-$wgGroupPermissions['user']['createpage'] = getenv("MW_PERMISSIONS_USER_CREATEPAGE") ?: true;
+$wgGroupPermissions['*']['createpage'] = getenv("MW_PERMISSIONS_CREATEPAGE") ? false : true;
+$wgGroupPermissions['user']['createpage'] = getenv("MW_PERMISSIONS_USER_CREATEPAGE") ? false : true;
 
-$wgGroupPermissions['*']['editmyprivateinfo'] = getenv("MW_PERMISSIONS_EDITMYPRIVATEINFO") ?: true;
+$wgGroupPermissions['*']['editmyprivateinfo'] = getenv("MW_PERMISSIONS_EDITMYPRIVATEINFO") ? false : true;
 
 # Rights for auth config
-$wgGroupPermissions['*']['createaccount'] = getenv('MW_AUTH_CREATEACCOUNT') ?: true;
-$wgGroupPermissions['*']['autocreateaccount'] = getenv('MW_AUTH_AUTOCREATEUSER') ?: false;
+$wgGroupPermissions['*']['createaccount'] = getenv('MW_AUTH_CREATEACCOUNT') ? false : true;
+$wgGroupPermissions['*']['autocreateaccount'] = getenv('MW_AUTH_AUTOCREATEUSER') ? true : false;
 
 # Auth_remoteuser Extension
 if (getenv('MW_AUTH_REMOTEUSER')) {
