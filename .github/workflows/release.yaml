@@ -82,14 +82,14 @@ jobs:
           format: 'sarif'
           ignore-unfixed: true
           skip-dirs: /var/www/html/vendor
-          security-checks: 'vuln'
-          output: 'trivy-results.sarif'
+          scanners: 'vuln,config'
+          output: 'trivy.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy.sarif'
 
       - name: Push Container Image
         id: docker_push
