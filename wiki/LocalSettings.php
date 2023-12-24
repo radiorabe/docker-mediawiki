@@ -288,20 +288,27 @@ if (getenv('MW_AUTH_REMOTEUSER')) {
 # Pluggable Auth
 if (getenv('MW_AUTH_PLUGGABLE')) {
     wfLoadExtension( 'PluggableAuth' );
+    $wgPluggableAuth_Config = [];
     $wgPluggableAuth_EnableAutoLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') : false;
     $wgPluggableAuth_EnableLocalLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') : false;
     $wgPluggableAuth_EnableLocalProperties = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') : false;
+];
+
 }
 
 # OpenID Connect
 if (getenv('MW_AUTH_OIDC')) {
     wfLoadExtension( 'OpenIDConnect' );
-    $wgOpenIDConnect_Config[getenv('MW_AUTH_OIDC_IDP_URL')] = [
-        'clientID' => getenv('MW_AUTH_OIDC_CLIENT_ID'),
-        'clientsecret' => getenv('MW_AUTH_OIDC_CLIENT_SECRET'),
+    $wgPluggableAuth_Config['OIDC'] = [
+        'plugin' => 'OpenIDConnect',
+        'data' => [
+            'providerURL' => getenv('MW_AUTH_OIDC_IDP_URL'),
+            'clientID' => getenv('MW_AUTH_OIDC_CLIENT_ID'),
+            'clientsecret' => getenv('MW_AUTH_OIDC_CLIENT_SECRET'),
+        ]
     ];
     if (getenv('MW_AUTH_OIDC_SCOPE')) {
-	$wgOpenIDConnect_Config[getenv('MW_AUTH_OIDC_IDP_URL')]['scope'] = explode(" ", getenv('MW_AUTH_OIDC_SCOPE'));
+        $wgPluggableAuth_Config['OIDC']['data']['scope'] = explode(" ", getenv('MW_AUTH_OIDC_SCOPE'));
     }
     $wgOpenIDConnect_UseRealNameAsUserName = getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') : false;
     $wgOpenIDConnect_UseEmailNameAsUserName = getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') : false;
