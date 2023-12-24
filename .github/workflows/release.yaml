@@ -82,7 +82,7 @@ jobs:
           format: 'sarif'
           ignore-unfixed: true
           skip-dirs: /var/www/html/vendor
-          scanners: 'vuln,config'
+          scanners: 'vuln,misconfig'
           output: 'trivy.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
