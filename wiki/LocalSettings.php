@@ -11,7 +11,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-$wgReadOnly = getenv('MW_WG_READONLY') ?: false;
+$wgReadOnly = getenv('MW_WG_READONLY') ? true : false;
 ini_set('display_errors', false);
 
 if (getenv('MW_DEBUG')) {    
@@ -54,7 +54,7 @@ if (getenv("MW_FAVICON")) {
 
 ## UPO means: this is also a user preference option
 
-$wgEnableEmail = getenv("MW_WG_ENABLE_EMAIL") ?: false;
+$wgEnableEmail = getenv("MW_WG_ENABLE_EMAIL") ? true : false;
 $wgEnableUserEmail = true; # UPO
 
 $wgEmergencyContact = getenv("MW_WG_EMERGENCY_CONTACT") ?: "apache@localhost";
@@ -282,15 +282,15 @@ $wgGroupPermissions['*']['autocreateaccount'] = getenv('MW_AUTH_AUTOCREATEUSER')
 
 # Auth_remoteuser Extension
 if (getenv('MW_AUTH_REMOTEUSER')) {
-    $wgAuthRemoteuserUserName = getenv('MW_AUTH_REMOTEUSER_USER_NAME') ?: null;
+    $wgAuthRemoteuserUserName = getenv('MW_AUTH_REMOTEUSER_USER_NAME') ? (bool) getenv('MW_AUTH_REMOTEUSER_USER_NAME') : null;
 }
 
 # Pluggable Auth
 if (getenv('MW_AUTH_PLUGGABLE')) {
     wfLoadExtension( 'PluggableAuth' );
-    $wgPluggableAuth_EnableAutoLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') ?: false;
-    $wgPluggableAuth_EnableLocalLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') ?: false;
-    $wgPluggableAuth_EnableLocalProperties = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') ?: false;
+    $wgPluggableAuth_EnableAutoLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') : false;
+    $wgPluggableAuth_EnableLocalLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') : false;
+    $wgPluggableAuth_EnableLocalProperties = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') : false;
 }
 
 # OpenID Connect
@@ -303,13 +303,13 @@ if (getenv('MW_AUTH_OIDC')) {
     if (getenv('MW_AUTH_OIDC_SCOPE')) {
 	$wgOpenIDConnect_Config[getenv('MW_AUTH_OIDC_IDP_URL')]['scope'] = explode(" ", getenv('MW_AUTH_OIDC_SCOPE'));
     }
-    $wgOpenIDConnect_UseRealNameAsUserName = getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') ?: false;
-    $wgOpenIDConnect_UseEmailNameAsUserName = getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') ?: false;
-    $wgOpenIDConnect_MigrateUsersByUserName = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') ?: false;
-    $wgOpenIDConnect_MigrateUsersByEmail = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') ?: false;
-    $wgOpenIDConnect_ForceLogout = getenv('MW_AUTH_OIDC_FORCE_LOGOUT') ?: false;
+    $wgOpenIDConnect_UseRealNameAsUserName = getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_USE_REAL_NAME_AS_USERNAME') : false;
+    $wgOpenIDConnect_UseEmailNameAsUserName = getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_USER_EMAIL_NAME_AS_USERNAME') : false;
+    $wgOpenIDConnect_MigrateUsersByUserName = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') : false;
+    $wgOpenIDConnect_MigrateUsersByEmail = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') ? (bool) getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') : false;
+    $wgOpenIDConnect_ForceLogout = getenv('MW_AUTH_OIDC_FORCE_LOGOUT') ? (bool) getenv('MW_AUTH_OIDC_FORCE_LOGOUT') : false;
     // override this when you can't change the 'sub' claim because you want to update keycloak
-    $wgOpenIDConnect_SubjectUserInfoClaim = getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') ?: 'sub';
+    $wgOpenIDConnect_SubjectUserInfoClaim = getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') ? getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') : 'sub';
 }
 
 if (getenv('MW_FILE_EXTENSION_ALLOW_SVG')) {
@@ -320,5 +320,5 @@ if (getenv('MW_FILE_EXTENSION_ALLOW_SVG')) {
 if (getenv('MW_SCRIBUNTO_ENABLE')) {
     wfLoadExtension('Scribunto');
     $wgScribuntoDefaultEngine = getenv('MW_SCRIBUNTO_DEFAULT_ENGINE') ?: 'luastandalone';
-    $wgScribuntoUseGeSHi = getenv('MW_SCRIBUNTO_USE_GESHI') ?: false;
+    $wgScribuntoUseGeSHi = getenv('MW_SCRIBUNTO_USE_GESHI') ? (bool) getenv('MW_SCRIBUNTO_USE_GESHI') : false;
 }
