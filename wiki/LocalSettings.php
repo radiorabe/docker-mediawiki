@@ -192,14 +192,9 @@ $wgDefaultUserOptions['visualeditor-enable'] = 1;
 # #$wgDefaultUserOptions['visualeditor-enable-experimental'] = 1;
 
 wfLoadExtension( 'Parsoid', 'vendor/wikimedia/parsoid/extension.json' );
-$wgVirtualRestConfig['modules']['parsoid'] = array(
-  // URL to the Parsoid instance
-  // Note! This is a server to server URL (it must be valid within your VM/container)
-  'url' => getenv("MW_WG_PARSOID_URL") ?: 'http://localhost:8080/rest.php',
-  // for the embedded parsoid to work in a container and return a 400 error
-  // we need to tell the editor that the url above is "fixed".
-  'fixedUrl' => true,
-);
+# with MV 1.39 parsoid autoconfig works and there is no need for
+# customising $wgVirtualRestConfig.
+$wgVisualEditorParsoidAutoConfig = true;
 
 # TemplateData Extension
 wfLoadExtension( 'TemplateData' );
