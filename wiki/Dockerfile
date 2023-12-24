@@ -60,7 +60,9 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/PluggableAuth.git /var/www/html/extensions/PluggableAuth
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/OpenIDConnect.git /var/www/html/extensions/OpenIDConnect \
- && sed -i "s/\$oidc->requestUserInfo( 'sub' );/\$oidc->requestUserInfo( \$GLOBALS['wgOpenIDConnect_SubjectUserInfoClaim'] );/" /var/www/html/extensions/OpenIDConnect/includes/OpenIDConnect.php
+ && sed -i "s/\$oidc->requestUserInfo( 'sub' );/\$oidc->requestUserInfo( \$GLOBALS['wgOpenIDConnect_SubjectUserInfoClaim'] );/" /var/www/html/extensions/OpenIDConnect/includes/OpenIDConnect.php \
+ && sed -i "s/\$this->subject = \$this->getClaim( \$oidc, 'sub' );/\$this->subject = \$this->getClaim( \$oidc, \$GLOBALS['wgOpenIDConnect_SubjectUserInfoClaim'] );/" extensions/OpenIDConnect/includes/OpenIDConnect.php \
+ && sed -i "s/\$oidc->addScope( \$scope ); /\$oidc->addScope( [\$scope] );/" extensions/OpenIDConnect/includes/OpenIDConnect.php
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/UserMerge.git /var/www/html/extensions/UserMerge
 
