@@ -292,8 +292,6 @@ if (getenv('MW_AUTH_PLUGGABLE')) {
     $wgPluggableAuth_EnableAutoLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_AUTO_LOGIN') : false;
     $wgPluggableAuth_EnableLocalLogin = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_LOGIN') : false;
     $wgPluggableAuth_EnableLocalProperties = getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') ? (bool) getenv('MW_AUTH_PLUGGABLE_ENABLE_LOCAL_PROPERTIES') : false;
-];
-
 }
 
 # OpenID Connect
