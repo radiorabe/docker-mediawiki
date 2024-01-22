@@ -38,7 +38,8 @@ RUN cd /var/www/html/ \
     "mediawiki/semantic-media-wiki  ~4.1.2" \
     "mediawiki/semantic-result-formats ~4.2.0" \
     "mediawiki/semantic-compound-queries ~2.2" \
-    "jumbojett/openid-connect-php 1.0.0"
+    "jumbojett/openid-connect-php 1.0.0" \
+    "mwstake/mediawiki-component-manifestregistry:~2.0"
 
 # Install extensions with a git based install
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/ExternalData.git /var/www/html/extensions/ExternalData
@@ -68,8 +69,7 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/NativeSvgHandler.git /var/www/html/extensions/NativeSvgHandler
 
-# pinned to 2.0.1 due to https://phabricator.wikimedia.org/T345498
-RUN git clone --depth=1 -b 2.0.1 https://github.com/wikimedia/mediawiki-extensions-DrawioEditor.git /var/www/html/extensions/DrawioEditor
+RUN git clone --depth=1 https://gerrit.wikimedia.org/r/mediawiki/extensions/DrawioEditor /var/www/html/extensions/DrawioEditor
 
 # DKL-LI-0003: remove unnecessary files
 RUN rm -rf \
