@@ -308,7 +308,7 @@ if (getenv('MW_AUTH_OIDC')) {
     $wgOpenIDConnect_MigrateUsersByUserName = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') ? (bool) getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_USERNAME') : false;
     $wgOpenIDConnect_MigrateUsersByEmail = getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') ? (bool) getenv('MW_AUTH_OIDC_MIGRATE_USERS_BY_EMAIL') : false;
     $wgOpenIDConnect_ForceLogout = getenv('MW_AUTH_OIDC_FORCE_LOGOUT') ? (bool) getenv('MW_AUTH_OIDC_FORCE_LOGOUT') : false;
-    // override this when you can't change the 'sub' claim because you want to update keycloak
+    // override this when you can't simply change the 'sub' claim (eg. because you are using keycloak and don't want to deploy a script to override the sub claim)
     $wgOpenIDConnect_SubjectUserInfoClaim = getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') ? getenv('MW_AUTH_OIDC_SUBJECT_USERINFO_CLAIM') : 'sub';
 }
 
