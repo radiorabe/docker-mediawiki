@@ -107,7 +107,7 @@ RUN    microdnf module enable php:8.0 \
          libgomp \
          libjpeg-turbo \
     && rpm -hiv \
-         http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/LibRaw-0.19.5-2.el8.x86_64.rpm \
+         https://repo.almalinux.org/almalinux/8/AppStream/x86_64/os/Packages/LibRaw-0.19.5-4.el8.x86_64.rpm \
     && microdnf install -y \
          bind-utils \
          findutils \
