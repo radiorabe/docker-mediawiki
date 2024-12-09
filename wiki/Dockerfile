@@ -1,4 +1,4 @@
-FROM mediawiki:1.39.7 AS build
+FROM mediawiki:1.39.10 AS build
 
 ENV MEDIAWIKI_EXT_BRANCH=REL1_39
 
