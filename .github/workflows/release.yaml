@@ -26,7 +26,7 @@ jobs:
       - name: Prepare additional Metadata
         id: addtional_meta
         run: |
-          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          echo created=$(date -u +'%Y-%m-%dT%H:%M:%SZ') >> $GITHUB_STATE
 
       - name: Docker meta
         id: meta
