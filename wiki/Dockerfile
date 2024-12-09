@@ -1,6 +1,6 @@
 FROM mediawiki:1.39.7 AS build
 
-ENV MEDIAWIKI_EXT_BRANCH REL1_39
+ENV MEDIAWIKI_EXT_BRANCH=REL1_39
 
 RUN set -x; \
     apt-get update \
