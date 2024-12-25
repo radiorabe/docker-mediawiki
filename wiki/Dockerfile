@@ -81,7 +81,7 @@ LABEL vendor='Radio Bern RaBe' \
 
 ENV HTTPD_CONTAINER_SCRIPTS_PATH=/usr/share/container-scripts/httpd/ \
     HTTPD_APP_ROOT=/var/www/html \
-    HTTPD_CONFIGURATION_PATH=${APP_ROOT}/etc/httpd.d \
+    HTTPD_CONFIGURATION_PATH=/var/www/html/etc/httpd.d \
     HTTPD_MAIN_CONF_PATH=/etc/httpd/conf \
     HTTPD_MAIN_CONF_MODULES_D_PATH=/etc/httpd/conf.modules.d \
     HTTPD_MAIN_CONF_D_PATH=/etc/httpd/conf.d \
