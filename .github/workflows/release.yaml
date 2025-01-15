@@ -62,7 +62,7 @@ jobs:
 
       - name: Build Container Image
         id: docker_build
-        uses: docker/build-push-action@v6.11.0
+        uses: docker/build-push-action@v6.12.0
         with:
           context: ./wiki/
           file: ./wiki/Dockerfile
@@ -93,7 +93,7 @@ jobs:
 
       - name: Push Container Image
         id: docker_push
-        uses: docker/build-push-action@v6.11.0
+        uses: docker/build-push-action@v6.12.0
         with:
           context: ./wiki/
           file: ./wiki/Dockerfile
