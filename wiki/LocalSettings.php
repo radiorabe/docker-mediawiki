@@ -225,7 +225,10 @@ wfLoadExtension( 'HierarchyBuilder' );
 # more exts
 wfLoadExtension( 'Arrays' );
 wfLoadExtension( 'HeaderTabs' );
-wfLoadExtension( 'ApprovedRevs' );
+
+if (getenv('MW_APPROVED_REVS')) {
+    wfLoadExtension( 'ApprovedRevs' );
+}
 
 # NativeSvgHandler needs opt-in due to xss concerns
 if (getenv('MW_NATIVESVGHANDLER')) {
