@@ -74,7 +74,7 @@ RUN rm -rf \
       /var/www/html/extensions/*/.git \
       /var/www/html/skins/*/.git
 
-FROM ghcr.io/radiorabe/ubi8-minimal:1.3.14
+FROM ghcr.io/radiorabe/ubi8-minimal:1.3.15
 
 LABEL vendor='Radio Bern RaBe' \
       maintainer='RaBe IT-Reaktion <it@rabe.ch>'
