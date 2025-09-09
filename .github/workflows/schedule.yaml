@@ -7,6 +7,6 @@ on:
 
 jobs:
   call-workflow:
-    uses: radiorabe/actions/.github/workflows/schedule-trivy.yaml@v0.34.0
+    uses: radiorabe/actions/.github/workflows/schedule-trivy.yaml@v0.34.1
     with:
       image-ref: 'ghcr.io/radiorabe/mediawiki:latest'
