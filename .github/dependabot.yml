@@ -1,18 +1,22 @@
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: docker
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     commit-message:
-      prefix: "ci: "
-    open-pull-requests-limit: 10
-    
-  - package-ecosystem: "docker"
-    directory: "/wiki"
+      prefix: "chore: "
+    groups:
+      baseimages:
+        patterns:
+          - "*"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     commit-message:
-      prefix: "feat: "
-    open-pull-requests-limit: 5
+      prefix: "chore(ci): "
+    groups:
+      actions:
+        patterns:
+          - "*"
