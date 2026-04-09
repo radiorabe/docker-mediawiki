@@ -54,7 +54,7 @@ jobs:
             io.openshift.tags=minimal rhel8 rabe mediawiki
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -104,3 +104,8 @@ jobs:
             ${{ steps.meta.outputs.labels }}
             version=${{ steps.meta.outputs.version }}
           cache-from: type=gha
+  github-actions:
+    permissions:
+      contents: read
+      security-events: write # so zizmor can publish results to the Security tab
+    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@479996126a091287dc3fd349786f6f8a6dd1b23c # v0.42.0
