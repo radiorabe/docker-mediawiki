@@ -62,7 +62,7 @@ jobs:
 
       - name: Build Container Image
         id: docker_build
-        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           context: ./wiki/
           file: ./wiki/Dockerfile
@@ -86,14 +86,14 @@ jobs:
           output: 'trivy.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13 # v4.35.1
+        uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
         if: always()
         with:
           sarif_file: 'trivy.sarif'
 
       - name: Push Container Image
         id: docker_push
-        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           context: ./wiki/
           file: ./wiki/Dockerfile
@@ -108,4 +108,4 @@ jobs:
     permissions:
       contents: read
       security-events: write # so zizmor can publish results to the Security tab
-    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@479996126a091287dc3fd349786f6f8a6dd1b23c # v0.42.0
+    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@3f1ee42ffa54794a512d3989c34e3b4514de64cc # v0.43.1
