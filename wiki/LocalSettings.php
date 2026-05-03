@@ -325,3 +325,8 @@ if (getenv('MW_SCRIBUNTO_ENABLE')) {
     $wgScribuntoDefaultEngine = getenv('MW_SCRIBUNTO_DEFAULT_ENGINE') ?: 'luastandalone';
     $wgScribuntoUseGeSHi = getenv('MW_SCRIBUNTO_USE_GESHI') ? (bool) getenv('MW_SCRIBUNTO_USE_GESHI') : false;
 }
+
+if (getenv('MW_KROKI_ENABLE')) {
+    wfLoadExtension( 'Kroki' );
+    $wgKrokiServerEndpoint = getenv('MW_KROKI_SERVER_ENDPOINT') ?: "https://kroki.io";
+}
