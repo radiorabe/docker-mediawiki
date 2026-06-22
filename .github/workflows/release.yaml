@@ -86,7 +86,7 @@ jobs:
           output: 'trivy.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@87557b9c84dde89fdd9b10e88954ac2f4248e463 # v4.36.1
+        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         if: always()
         with:
           sarif_file: 'trivy.sarif'
@@ -108,4 +108,4 @@ jobs:
     permissions:
       contents: read
       security-events: write # so zizmor can publish results to the Security tab
-    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@b37e51397726092d8462a2a9b676ea5a5e3a8deb # v0.44.1
+    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@5dafb461cea1f8b296d89297dc6de7bd0891f0d2 # v0.44.2
