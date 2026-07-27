@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -86,7 +86,7 @@ jobs:
           output: 'trivy.sarif'
           
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        uses: github/codeql-action/upload-sarif@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
         if: always()
         with:
           sarif_file: 'trivy.sarif'
@@ -108,4 +108,4 @@ jobs:
     permissions:
       contents: read
       security-events: write # so zizmor can publish results to the Security tab
-    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@5dafb461cea1f8b296d89297dc6de7bd0891f0d2 # v0.44.2
+    uses: radiorabe/actions/.github/workflows/test-github-actions.yaml@953c51da7e4c2c681f15c70513cb803c8fa461cc # v0.44.3
