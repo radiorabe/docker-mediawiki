@@ -69,6 +69,8 @@ RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/
 
 RUN git clone --depth=1 -b $MEDIAWIKI_EXT_BRANCH https://gerrit.wikimedia.org/r/mediawiki/extensions/DrawioEditor /var/www/html/extensions/DrawioEditor
 
+RUN git clone --depth=1 -b main https://github.com/CptLausebaer/mediawiki-kroki-extension.git /var/www/html/extensions/Kroki
+
 # DKL-LI-0003: remove unnecessary files
 RUN rm -rf \
       /var/www/html/extensions/*/.git \
